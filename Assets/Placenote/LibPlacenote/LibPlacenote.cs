@@ -774,7 +774,7 @@ public class LibPlacenote : MonoBehaviour
 			mCurrStatus = MappingStatus.RUNNING;
 			/// Stops the relocalization (checkLocalization) or the mapping (saving cameraPoses) invoke
 			sInstance.CancelInvoke();
-			/// Start saving camera poses to create a map
+            /// Start saving camera poses to create a map
 			simCameraPoses.cameraPoses = new List<PNTransformUnity> ();
 			sInstance.InvokeRepeating ("SaveCameraPose", 0f, 0.5f);
 		}

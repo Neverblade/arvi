@@ -263,7 +263,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1724757441}
+      - m_Target: {fileID: 1724757445}
         m_MethodName: OnListMapClick
         m_Mode: 1
         m_Arguments:
@@ -979,7 +979,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1724757441}
+      - m_Target: {fileID: 1724757445}
         m_MethodName: OnExitClick
         m_Mode: 1
         m_Arguments:
@@ -1223,7 +1223,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1724757441}
+      - m_Target: {fileID: 1724757445}
         m_MethodName: OnLoadMapClicked
         m_Mode: 1
         m_Arguments:
@@ -1345,7 +1345,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1724757441}
+      - m_Target: {fileID: 1724757445}
         m_MethodName: OnNewMapClick
         m_Mode: 1
         m_Arguments:
@@ -1448,8 +1448,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1724757442}
-        m_MethodName: OnSimulatorDropShape
+      - m_Target: {fileID: 1724757446}
+        m_MethodName: OnSimulatorDropAudioCue
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1589,7 +1589,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1724757441}
+      - m_Target: {fileID: 1724757445}
         m_MethodName: OnSaveMapClick
         m_Mode: 1
         m_Arguments:
@@ -1711,7 +1711,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1724757441}
+      - m_Target: {fileID: 1724757445}
         m_MethodName: OnCancelClick
         m_Mode: 1
         m_Arguments:
@@ -2265,7 +2265,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1724757441}
+      - m_Target: {fileID: 1724757445}
         m_MethodName: OnDeleteMapClicked
         m_Mode: 1
         m_Arguments:
@@ -2678,6 +2678,8 @@ GameObject:
   - component: {fileID: 1724757443}
   - component: {fileID: 1724757441}
   - component: {fileID: 1724757442}
+  - component: {fileID: 1724757445}
+  - component: {fileID: 1724757446}
   m_Layer: 5
   m_Name: SamplePanel
   m_TagString: Untagged
@@ -2713,7 +2715,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1724757439}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0956e3adc39844872bb81e774c3418ab, type: 3}
   m_Name: 
@@ -2738,7 +2740,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1724757439}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 69c9f6fdeeb394a07b35cd0d68a21cba, type: 3}
   m_Name: 
@@ -2779,6 +2781,46 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1724757439}
+--- !u!114 &1724757445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1724757439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b0e4a9f522b20944ad8e595b9fc48a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mMapSelectedPanel: {fileID: 647898922}
+  mInitButtonPanel: {fileID: 482724178}
+  mMappingButtonPanel: {fileID: 195744147}
+  mSimulatorAddAudioCueButton: {fileID: 755166316}
+  mMapListPanel: {fileID: 1183723719}
+  mExitButton: {fileID: 557238741}
+  mListElement: {fileID: 1170995837258984, guid: a3ef81b9c1147467396e3a086b211961,
+    type: 2}
+  mListContentParent: {fileID: 2118408117}
+  mToggleGroup: {fileID: 2118408114}
+  mLabelText: {fileID: 60089348}
+  mRadiusSlider: {fileID: 2034613333}
+  mMaxRadiusSearch: 500
+  mRadiusLabel: {fileID: 808605828}
+--- !u!114 &1724757446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1724757439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40f835ea891af7243b779157aff11ff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioCuePrefab: {fileID: 1680993846712800, guid: 12873a03e4bcec54fbf850a0997e8df0,
+    type: 2}
+  audioCueInfoList: []
+  audioCueObjList: []
 --- !u!1001 &1750181122
 Prefab:
   m_ObjectHideFlags: 0
@@ -3463,7 +3505,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1724757441}
+        - m_Target: {fileID: 1724757445}
           m_MethodName: OnRadiusSelect
           m_Mode: 1
           m_Arguments:
