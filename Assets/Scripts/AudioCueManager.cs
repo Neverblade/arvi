@@ -19,7 +19,7 @@ public class AudioCueList {
 
 public class AudioCueManager : MonoBehaviour {
 
-    public static float DROP_DISTANCE_FROM_CAMERA = 0.3f;
+    public static float DROP_DISTANCE_FROM_CAMERA = 0;
     public static string AUDIO_CUE_LIST_NAME = "audioCueList";
 
     public GameObject audioCuePrefab;
