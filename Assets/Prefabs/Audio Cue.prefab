@@ -26,7 +26,6 @@ GameObject:
   - component: {fileID: 82172813093075480}
   - component: {fileID: 114703376351189068}
   - component: {fileID: 198554550840153408}
-  - component: {fileID: 114213160725879736}
   m_Layer: 0
   m_Name: Audio Cue
   m_TagString: Untagged
@@ -181,17 +180,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &114213160725879736
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1077425278966170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7be5327030464ad5869c3e7ad64babe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114703376351189068
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -23,10 +23,25 @@ public class AudioCueManager : MonoBehaviour {
     public static string AUDIO_CUE_LIST_NAME = "audioCueList";
 
     public GameObject audioCuePrefab;
-    public List<AudioCueInfo> audioCueInfoList = new List<AudioCueInfo>();
-    public List<GameObject> audioCueObjList = new List<GameObject>();
+    public GameObject audioInfoElementPrefab;
+    public GameObject audioListPanel;
+    public RectTransform audioListContentPanel;
 
-    private Vector3 storedPosition;
+    [HideInInspector] public List<AudioCueInfo> audioCueInfoList = new List<AudioCueInfo>();
+    [HideInInspector] public List<GameObject> audioCueObjList = new List<GameObject>();
+    [HideInInspector] public AudioInfoElement selectedAudioInfoElement;
+    [HideInInspector] public Vector3 storedPosition;
+
+    private AudioSource audioSource;
+    private AudioLibrary audioLibrary;
+    private AudioInfoElement playingAudioInfoElement;
+
+    private void Start() {
+        audioSource = GetComponent<AudioSource>();
+        audioLibrary = GetComponent<AudioLibrary>();
+        audioListPanel.SetActive(false);
+        PopulateAudioList();
+    }
 
     private void Update() {
         if (Input.touchCount > 0) {
@@ -35,22 +50,17 @@ public class AudioCueManager : MonoBehaviour {
                 if (EventSystem.current.currentSelectedGameObject == null) {
                     Transform camTransform = Camera.main.transform;
                     storedPosition = camTransform.position + camTransform.forward * DROP_DISTANCE_FROM_CAMERA;
-                    AddAudioCue(storedPosition);
+                    audioListPanel.SetActive(true);
                 }
             }
         }
     }
 
-    public void OnSimulatorDropAudioCue() {
-        Transform camTransform = Camera.main.transform;
-        storedPosition = camTransform.position + camTransform.forward * DROP_DISTANCE_FROM_CAMERA;
+    #region Audio Cues in the Scene
 
-        AddAudioCue(storedPosition);
-    }
-
-    public void AddAudioCue(Vector3 position) {
+    public void AddAudioCue(Vector3 position, AudioInfoElement audioInfo) {
         AudioCueInfo audioCueInfo = new AudioCueInfo();
-        audioCueInfo.id = "sample"; // HARD-CODED
+        audioCueInfo.id = audioInfo.id;
         audioCueInfo.position = position;
         audioCueInfoList.Add(audioCueInfo);
 
@@ -59,7 +69,10 @@ public class AudioCueManager : MonoBehaviour {
     }
 
     public GameObject AudioCueFromInfo(AudioCueInfo info) {
-        return Instantiate(audioCuePrefab, info.position, Quaternion.identity);
+        GameObject audioCueObj = Instantiate(audioCuePrefab, info.position, Quaternion.identity);
+        audioCueObj.GetComponent<AudioSource>().clip = audioLibrary.GetAudioClip(info.id);
+        audioCueObj.GetComponent<AudioSource>().Play();
+        return audioCueObj;
     }
 
     public void ClearAudioCues() {
@@ -96,4 +109,71 @@ public class AudioCueManager : MonoBehaviour {
             }
         }
     }
+
+    #endregion
+
+    #region Audio Cue List UI
+
+    /**
+     * Fills a panel with AudioCueElements with info from the library.
+     */
+    public void PopulateAudioList() {
+        foreach (AudioLibrary.Audio audio in audioLibrary.library) {
+            GameObject element = Instantiate(audioInfoElementPrefab);
+            AudioInfoElement audioInfoElement = element.GetComponent<AudioInfoElement>();
+            audioInfoElement.id = audio.id;
+            audioInfoElement.clip = audio.clip;
+            audioInfoElement.manager = this;
+            element.transform.SetParent(audioListContentPanel.transform);
+        }
+    }
+
+    /**
+     * Plays the given audio clip in the UI.
+     */
+    public void PlayAudioClip(AudioInfoElement element) {
+        StopAudioClip();
+        if (element.clip != null) {
+            audioSource.clip = element.clip;
+            audioSource.Play();
+            playingAudioInfoElement = element;
+        } else {
+            Debug.LogWarning("Provided clip was null.");
+        }
+    }
+
+    /**
+     * Stops playing whatever clip is running in the UI.
+     */
+    public void StopAudioClip() {
+        audioSource.Stop();
+        audioSource.clip = null;
+        if (playingAudioInfoElement != null) {
+            AudioInfoElement element = playingAudioInfoElement;
+            playingAudioInfoElement = null;
+            element.TurnOff();
+        }
+    }
+
+    #endregion
+
+    #region UI Calls
+
+    /**
+     * CURRENTLY UNUSED.
+     * Clicked the cancel button.
+     */
+    public void OnClickCancel() {
+        
+    }
+
+    /**
+     * CURRENTLY UNUSED.
+     * Clicked the select button.
+     */
+    public void OnClickSelect() {
+
+    }
+
+    #endregion
 }

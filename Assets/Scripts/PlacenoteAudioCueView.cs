@@ -23,6 +23,8 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
     [SerializeField] Slider mRadiusSlider;
     [SerializeField] float mMaxRadiusSearch;
     [SerializeField] Text mRadiusLabel;
+    [SerializeField] AudioCueManager mAudioCueManager; // CHANGED
+    [SerializeField] GameObject mAudioListPanel; // CHANGED
 
     private UnityARSessionNativeInterface mSession;
 
@@ -145,7 +147,7 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
 
         LibPlacenote.Instance.StopSession();
         FeaturesVisualizer.clearPointcloud();
-        GetComponent<AudioCueManager>().ClearAudioCues(); // CHANGED
+        mAudioCueManager.ClearAudioCues(); // CHANGED
 
     }
 
@@ -320,7 +322,7 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
                 JObject audioCueList = GetComponent<AudioCueManager>().AudioCuesToJSON(); // CHANGED
 
                 userdata[AudioCueManager.AUDIO_CUE_LIST_NAME] = audioCueList; // CHANGED
-                GetComponent<AudioCueManager>().ClearAudioCues(); // CHANGED
+                mAudioCueManager.ClearAudioCues(); // CHANGED
 
                 if (useLocation) {
                     metadata.location = new LibPlacenote.MapLocation();
@@ -358,7 +360,7 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
         Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
         if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST) {
             mLabelText.text = "Localized";
-            GetComponent<AudioCueManager>().LoadAudioCuesJSON(mSelectedMapInfo.metadata.userdata); // CHANGED
+            mAudioCueManager.LoadAudioCuesJSON(mSelectedMapInfo.metadata.userdata); // CHANGED
         }
         else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING) {
             mLabelText.text = "Mapping: Tap to add audio cues"; // CHANGED
@@ -367,9 +369,29 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
             mLabelText.text = "Searching for position lock";
         }
         else if (currStatus == LibPlacenote.MappingStatus.WAITING) {
-            if (GetComponent<AudioCueManager>().audioCueObjList.Count != 0) { // CHANGED
-                GetComponent<AudioCueManager>().ClearAudioCues(); // CHANGED
+            if (mAudioCueManager.audioCueObjList.Count != 0) { // CHANGED
+                mAudioCueManager.ClearAudioCues(); // CHANGED
             }
         }
+    }
+
+    // NEW FUNCTION BELOW
+    public void OpenAudioMenu() {
+        Transform camTransform = Camera.main.transform;
+        mAudioCueManager.storedPosition = camTransform.position + camTransform.forward * AudioCueManager.DROP_DISTANCE_FROM_CAMERA;
+        mAudioListPanel.SetActive(true);
+        mMappingButtonPanel.SetActive(false);
+    }
+
+    // NEW FUNCTION BELOW
+    public void CloseAudioMenu() {
+        mAudioListPanel.SetActive(false);
+        mMappingButtonPanel.SetActive(true);
+    }
+
+    // NEW FUNCTION BELOW
+    public void OnClickSelect() {
+        mAudioCueManager.AddAudioCue(mAudioCueManager.storedPosition, mAudioCueManager.selectedAudioInfoElement);
+        CloseAudioMenu();
     }
 }
