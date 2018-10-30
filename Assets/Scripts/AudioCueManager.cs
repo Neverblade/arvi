@@ -23,9 +23,10 @@ public class AudioCueManager : MonoBehaviour {
     public static string AUDIO_CUE_LIST_NAME = "audioCueList";
 
     public GameObject audioCuePrefab;
-
     public List<AudioCueInfo> audioCueInfoList = new List<AudioCueInfo>();
     public List<GameObject> audioCueObjList = new List<GameObject>();
+
+    private Vector3 storedPosition;
 
     private void Update() {
         if (Input.touchCount > 0) {
@@ -33,8 +34,8 @@ public class AudioCueManager : MonoBehaviour {
             if (touch.phase == TouchPhase.Began) {
                 if (EventSystem.current.currentSelectedGameObject == null) {
                     Transform camTransform = Camera.main.transform;
-                    Vector3 position = camTransform.position + camTransform.forward * DROP_DISTANCE_FROM_CAMERA;
-                    AddAudioCue(position);
+                    storedPosition = camTransform.position + camTransform.forward * DROP_DISTANCE_FROM_CAMERA;
+                    AddAudioCue(storedPosition);
                 }
             }
         }
@@ -42,9 +43,9 @@ public class AudioCueManager : MonoBehaviour {
 
     public void OnSimulatorDropAudioCue() {
         Transform camTransform = Camera.main.transform;
-        Vector3 position = camTransform.position + camTransform.forward * DROP_DISTANCE_FROM_CAMERA;
+        storedPosition = camTransform.position + camTransform.forward * DROP_DISTANCE_FROM_CAMERA;
 
-        AddAudioCue(position);
+        AddAudioCue(storedPosition);
     }
 
     public void AddAudioCue(Vector3 position) {
