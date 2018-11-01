@@ -1,14 +1,17 @@
 ﻿using System;
 using UnityEngine;
 
-public class SwipeDetector : MonoBehaviour
+public class TapSwipeDetector : MonoBehaviour
 {
+
     private Vector2 fingerDownPosition;
     private Vector2 fingerUpPosition;
 
-    private float minDistanceForSwipe = 50f;
+    private float minDistanceForSwipe = 150f;
 
     public static event Action<SwipeData> OnSwipe = delegate { };
+    public static event Action OnTap = delegate { };
+    public static event Action OnDoubleTap = delegate { };
 
     private void Update()
     {
@@ -23,12 +26,22 @@ public class SwipeDetector : MonoBehaviour
             if (touch.phase == TouchPhase.Ended)
             {
                 fingerDownPosition = touch.position;
-                DetectSwipe();
+                if (!DetectSwipe())
+                {
+                    if (touch.tapCount == 1 && touch.deltaTime <= 0.8f)
+                    {
+                        SendTap();
+                    }
+                    else if (touch.tapCount == 2)
+                    {
+                        SendDoubleTap();
+                    }
+                }
             }
         }
     }
 
-    private void DetectSwipe()
+    private Boolean DetectSwipe()
     {
         if (SwipeDistanceCheckMet())
         {
@@ -43,7 +56,9 @@ public class SwipeDetector : MonoBehaviour
                 SendSwipe(direction);
             }
             fingerUpPosition = fingerDownPosition;
+            return true;
         }
+        return false;
     }
 
     private bool IsVerticalSwipe()
@@ -75,6 +90,16 @@ public class SwipeDetector : MonoBehaviour
             EndPosition = fingerUpPosition
         };
         OnSwipe(swipeData);
+    }
+
+    private void SendTap()
+    {
+        OnTap();
+    }
+
+    private void SendDoubleTap()
+    {
+        OnDoubleTap();
     }
 }
 
