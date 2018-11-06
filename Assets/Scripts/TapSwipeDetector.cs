@@ -13,7 +13,17 @@ public class TapSwipeDetector : MonoBehaviour
     public static event Action OnTap = delegate { };
     public static event Action OnDoubleTap = delegate { };
 
-    private void Update()
+    // PC ONLY
+    private float tapCount;
+    private static float CLICK_DELTA = 0.8f;
+    private float clickQuota = 0;
+
+    private void Update() {
+        UpdateTouch();
+        UpdateMouse();
+    }
+
+    private void UpdateTouch()
     {
         foreach (Touch touch in Input.touches)
         {
@@ -36,6 +46,34 @@ public class TapSwipeDetector : MonoBehaviour
                     {
                         SendDoubleTap();
                     }
+                }
+            }
+        }
+    }
+
+    private void UpdateMouse() {
+        // Removes taps over time by detecting loop arounds
+        float newClickQuota = Mathf.Repeat(clickQuota + Time.deltaTime, CLICK_DELTA);
+        if (newClickQuota < clickQuota) {
+            tapCount = Mathf.Max(tapCount - 1, 0);
+        }
+        clickQuota = newClickQuota;
+
+        // Process input
+        Vector3 pos = Input.mousePosition;
+        if (Input.GetMouseButtonDown(0)) {
+            fingerUpPosition = pos;
+            fingerDownPosition = pos;
+        } else if (Input.GetMouseButtonUp(0)) {
+            fingerDownPosition = pos;
+            if (!DetectSwipe()) {
+                tapCount += 1;
+                if (tapCount == 1) {
+                    SendTap();
+                } else if (tapCount == 2) {
+                    SendDoubleTap();
+                    tapCount = 0;
+                    clickQuota = 0;
                 }
             }
         }
