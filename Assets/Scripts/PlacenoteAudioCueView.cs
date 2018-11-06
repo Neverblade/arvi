@@ -13,7 +13,6 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
     [SerializeField] GameObject mMapSelectedPanel;
     [SerializeField] GameObject mInitButtonPanel;
     [SerializeField] GameObject mMappingButtonPanel;
-    [SerializeField] GameObject mSimulatorAddAudioCueButton; // CHANGED
     [SerializeField] GameObject mMapListPanel;
     [SerializeField] GameObject mExitButton;
     [SerializeField] GameObject mListElement;
@@ -23,8 +22,6 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
     [SerializeField] Slider mRadiusSlider;
     [SerializeField] float mMaxRadiusSearch;
     [SerializeField] Text mRadiusLabel;
-    [SerializeField] AudioCueManager mAudioCueManager; // CHANGED
-    [SerializeField] GameObject mAudioListPanel; // CHANGED
 
     private UnityARSessionNativeInterface mSession;
 
@@ -35,7 +32,11 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
 
     private bool mReportDebug = false;
 
-    private LibPlacenote.MapInfo mSelectedMapInfo;
+    private List<LibPlacenote.MapInfo> mMapList = new List<LibPlacenote.MapInfo>(); //changed
+    private int mCurrentIdx = 0; //changed
+    private bool isMapListPanel = false;
+    private int mPanelStatusCode;
+    private LibPlacenote.MapInfo mSelectedMapInfo; 
     private string mSelectedMapId {
         get {
             return mSelectedMapInfo != null ? mSelectedMapInfo.placeId : null;
@@ -61,11 +62,8 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
         FeaturesVisualizer.EnablePointcloud();
         LibPlacenote.Instance.RegisterListener(this);
         ResetSlider();
+        TapSwipeDetector.OnSwipe += TapDetector_OnSwipe; //changed
 
-        // for simulator
-#if UNITY_EDITOR
-		mSimulatorAddAudioCueButton.SetActive(true); // CHANGED
-#endif
     }
 
     void Update() {
@@ -85,19 +83,23 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
             Destroy(t.gameObject);
         }
 
-
+        isMapListPanel = true;
+        mPanelStatusCode = 1;
         mMapListPanel.SetActive(true);
         mInitButtonPanel.SetActive(false);
         mRadiusSlider.gameObject.SetActive(true);
+
+        //I leave all map now for easier testing, will change to search api to filter maps later on
         LibPlacenote.Instance.ListMaps((mapList) => {
             // render the map list!
             foreach (LibPlacenote.MapInfo mapInfoItem in mapList) {
                 if (mapInfoItem.metadata.userdata != null) {
                     Debug.Log(mapInfoItem.metadata.userdata.ToString(Formatting.None));
                 }
-                AddMapToList(mapInfoItem);
+                mMapList.Add(mapInfoItem); //changed
             }
         });
+        AddMapToList(mMapList[mCurrentIdx]); //changed
     }
 
     public void OnRadiusSelect() {
@@ -105,7 +107,6 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
         mLabelText.text = "Filtering maps by GPS location";
 
         LocationInfo locationInfo = Input.location.lastData;
-
 
         float radiusSearch = mRadiusSlider.value * mMaxRadiusSearch;
         mRadiusLabel.text = "Distance Filter: " + (radiusSearch / 1000.0).ToString("F2") + " km";
@@ -147,7 +148,6 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
 
         LibPlacenote.Instance.StopSession();
         FeaturesVisualizer.clearPointcloud();
-        mAudioCueManager.ClearAudioCues(); // CHANGED
 
     }
 
@@ -165,6 +165,67 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
         mSelectedMapInfo = mapInfo;
         mMapSelectedPanel.SetActive(true);
         mRadiusSlider.gameObject.SetActive(false);
+    }
+
+    private void TapDetector_OnSwipe(SwipeData data)
+    {
+        //need to check for mapListPanel showing, only by when we check up/down swipe
+        //need to add logic checking left/right swipe
+        if(isMapListPanel){
+            Debug.Log("Directions: " + data.Direction);
+            foreach (Transform t in mListContentParent.transform)
+            {
+                Destroy(t.gameObject);
+            }
+            if (data.Direction == SwipeDirection.Down)
+            {
+                if (++mCurrentIdx == mMapList.Count)
+                {
+                    mCurrentIdx = 0;
+                }
+                AddMapToList(mMapList[mCurrentIdx]);
+            }
+            else if (data.Direction == SwipeDirection.Up)
+            {
+                if (--mCurrentIdx == -1)
+                {
+                    mCurrentIdx = mMapList.Count - 1;
+                }
+                AddMapToList(mMapList[mCurrentIdx]);
+            }
+            else if (data.Direction == SwipeDirection.Left){
+                if(mPanelStatusCode == 1){
+                    mMapListPanel.SetActive(false);
+                    Debug.Log("Cancel Button Shown");
+                    mPanelStatusCode--;
+                }else if(mPanelStatusCode == 2){
+                    mMapListPanel.SetActive(true);
+                    mPanelStatusCode--;
+                }else{
+                    Debug.Log("Load Map Button Shown");
+                    mPanelStatusCode = 2;
+                }
+            }
+            else {
+                if (mPanelStatusCode == 1)
+                {
+                    mMapListPanel.SetActive(false);
+                    Debug.Log("Load Map Button Shown");
+                    mPanelStatusCode++;
+                }
+                else if (mPanelStatusCode == 0)
+                {
+                    mMapListPanel.SetActive(true);
+                    mPanelStatusCode++;
+                }
+                else
+                {
+                    Debug.Log("Cancel Button Shown");
+                    mPanelStatusCode = 0;
+                }
+            }
+        }
+
     }
 
 
@@ -322,7 +383,6 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
                 JObject audioCueList = GetComponent<AudioCueManager>().AudioCuesToJSON(); // CHANGED
 
                 userdata[AudioCueManager.AUDIO_CUE_LIST_NAME] = audioCueList; // CHANGED
-                mAudioCueManager.ClearAudioCues(); // CHANGED
 
                 if (useLocation) {
                     metadata.location = new LibPlacenote.MapLocation();
@@ -360,38 +420,12 @@ public class PlacenoteAudioCueView : MonoBehaviour, PlacenoteListener {
         Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
         if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST) {
             mLabelText.text = "Localized";
-            mAudioCueManager.LoadAudioCuesJSON(mSelectedMapInfo.metadata.userdata); // CHANGED
-        }
-        else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING) {
-            mLabelText.text = "Mapping: Tap to add audio cues"; // CHANGED
         }
         else if (currStatus == LibPlacenote.MappingStatus.LOST) {
             mLabelText.text = "Searching for position lock";
         }
-        else if (currStatus == LibPlacenote.MappingStatus.WAITING) {
-            if (mAudioCueManager.audioCueObjList.Count != 0) { // CHANGED
-                mAudioCueManager.ClearAudioCues(); // CHANGED
-            }
-        }
+
     }
 
-    // NEW FUNCTION BELOW
-    public void OpenAudioMenu() {
-        Transform camTransform = Camera.main.transform;
-        mAudioCueManager.storedPosition = camTransform.position + camTransform.forward * AudioCueManager.DROP_DISTANCE_FROM_CAMERA;
-        mAudioListPanel.SetActive(true);
-        mMappingButtonPanel.SetActive(false);
-    }
 
-    // NEW FUNCTION BELOW
-    public void CloseAudioMenu() {
-        mAudioListPanel.SetActive(false);
-        mMappingButtonPanel.SetActive(true);
-    }
-
-    // NEW FUNCTION BELOW
-    public void OnClickSelect() {
-        mAudioCueManager.AddAudioCue(mAudioCueManager.storedPosition, mAudioCueManager.selectedAudioInfoElement);
-        CloseAudioMenu();
-    }
 }
