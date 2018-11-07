@@ -53,4 +53,9 @@ public class ScriptManager : MonoBehaviour {
         nextMode.SetupMode();
         currentMode = nextMode;
     }
+
+    // TODO: Add text-to-speech support
+    public void OutputText(string text) {
+        print("AUDIO: " + text);
+    }
 }

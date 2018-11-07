@@ -17,7 +17,7 @@ public class NewMapMode : Mode {
 
         // Clean up event handler
         TapSwipeDetector.OnSwipe -= OnSwipeDefault;
-        TapSwipeDetector.OnTap -= OnTapDefault;
+        TapSwipeDetector.OnTap -= OutputCurrentElement;
         TapSwipeDetector.OnDoubleTap -= OnDoubleTapDefault;
     }
 
@@ -34,11 +34,11 @@ public class NewMapMode : Mode {
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;
-        TapSwipeDetector.OnTap += OnTapDefault;
+        TapSwipeDetector.OnTap += OutputCurrentElement;
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
 
         // Output current element name
-        OutputElementName(SM.instance.elements[SM.instance.index]);
+        OutputCurrentElement();
     }
 
     public void OnSelectAddAudioCue() {

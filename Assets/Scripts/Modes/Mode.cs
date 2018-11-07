@@ -9,8 +9,8 @@ public abstract class Mode : MonoBehaviour {
 
     public abstract void CleanupMode();
 
-    public void OnTapDefault() {
-        OutputElementName(SM.instance.elements[SM.instance.index]);
+    public void OutputCurrentElement() {
+        SM.instance.OutputText(SM.instance.elements[SM.instance.index].name);
     }
 
     public void OnDoubleTapDefault() {
@@ -32,10 +32,6 @@ public abstract class Mode : MonoBehaviour {
             SM.instance.index += 1;
         }
         SM.instance.index = SM.instance.index % SM.instance.elements.Count;
-        OutputElementName(SM.instance.elements[SM.instance.index]);
-    }
-
-    public void OutputElementName(SM.Element element) {
-        print("Focused element: " + element.name);
+        OutputCurrentElement();
     }
 }

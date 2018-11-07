@@ -17,7 +17,7 @@ public class MainMenuMode : Mode {
 
         // Clean up event handlers
         TapSwipeDetector.OnSwipe -= OnSwipeDefault;
-        TapSwipeDetector.OnTap -= OnTapDefault;
+        TapSwipeDetector.OnTap -= OutputCurrentElement;
         TapSwipeDetector.OnDoubleTap -= OnDoubleTapDefault;
     }
 
@@ -33,11 +33,11 @@ public class MainMenuMode : Mode {
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;
-        TapSwipeDetector.OnTap += OnTapDefault;
+        TapSwipeDetector.OnTap += OutputCurrentElement;
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
 
         // Output current element name
-        OutputElementName(SM.instance.elements[SM.instance.index]);
+        OutputCurrentElement();
     }
 
     public void OnSelectScanning() {
