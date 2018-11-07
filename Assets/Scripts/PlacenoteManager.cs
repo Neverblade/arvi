@@ -8,7 +8,20 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     // Singleton
     public static PlacenoteManager instance;
 
+    // Audio Cues
+    public AudioCueManager audioCueManager;
+
+    // Placenote / ARKit
     private UnityARSessionNativeInterface arSession;
+    private bool ARInit = false;
+    private LibPlacenote.MapMetadataSettable currMapDetails;
+    private LibPlacenote.MapInfo selectedMapInfo;
+    private string selectedMapId {
+        get {
+            return selectedMapInfo != null ? selectedMapInfo.placeId : null;
+        }
+    }
+    private string saveMapId = null;
 
     private void Start() {
         // Singleton handling
@@ -23,6 +36,13 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
         StartARKit();
         FeaturesVisualizer.EnablePointcloud();
         LibPlacenote.Instance.RegisterListener(this);
+    }
+
+    private void Update() {
+        if (!ARInit && LibPlacenote.Instance.Initialized()) {
+            ARInit = true;
+            OutputText("Ready to start!");
+        }
     }
 
     private void StartARKit() {
@@ -49,19 +69,27 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     public void OnStatusChange(LibPlacenote.MappingStatus prevStatus, LibPlacenote.MappingStatus currStatus) {
         Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
         if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST) {
-            //mLabelText.text = "Localized";
+            OutputText("Localized");
             //mAudioCueManager.LoadAudioCuesJSON(mSelectedMapInfo.metadata.userdata); // CHANGED
         }
         else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING) {
-            //mLabelText.text = "Mapping: Tap to add audio cues"; // CHANGED
+            OutputText("Mapping: Tap to add audio cues");
         }
         else if (currStatus == LibPlacenote.MappingStatus.LOST) {
-            //mLabelText.text = "Searching for position lock";
+            OutputText("Searching for position lock");
         }
         else if (currStatus == LibPlacenote.MappingStatus.WAITING) {
-            //if (mAudioCueManager.audioCueObjList.Count != 0) { // CHANGED
-            //    mAudioCueManager.ClearAudioCues(); // CHANGED
-            //}
+            if (audioCueManager.audioCueObjList.Count != 0) { // CHANGED
+                audioCueManager.ClearAudioCues(); // CHANGED
+            }
         }
+    }
+
+    /**
+     * For outputting status updates and other information.
+     * This might turn into text-to-speech, or a label up top, etc.
+     */
+    public void OutputText(string text) {
+        Debug.Log("PLACENOTE: " + text);
     }
 }

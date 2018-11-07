@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.iOS;
+using PM = PlacenoteManager;
 
 /**
  * Main controller for ARVI.
@@ -36,8 +37,6 @@ public class ModeManager : MonoBehaviour {
         } else if (instance != this) {
             Destroy(this);
         }
-
-        // TODO: Placenote setup
 
         // Start at the main menu
         startingMode.SetupMode();
