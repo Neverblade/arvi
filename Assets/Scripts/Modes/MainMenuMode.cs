@@ -16,9 +16,9 @@ public class MainMenuMode : Mode {
         SM.instance.elements.Clear();
 
         // Clean up event handlers
-        TapSwipeDetector.OnSwipe -= OnSwipe;
-        TapSwipeDetector.OnTap -= OnSingleTap;
-        TapSwipeDetector.OnDoubleTap -= OnDoubleTap;
+        TapSwipeDetector.OnSwipe -= OnSwipeDefault;
+        TapSwipeDetector.OnTap -= OnTapDefault;
+        TapSwipeDetector.OnDoubleTap -= OnDoubleTapDefault;
     }
 
     public override void SetupMode() {
@@ -31,16 +31,18 @@ public class MainMenuMode : Mode {
         SM.instance.elements = elements;
 
         // Set up event handlers
-        TapSwipeDetector.OnSwipe += OnSwipe;
-        TapSwipeDetector.OnTap += OnSingleTap;
-        TapSwipeDetector.OnDoubleTap += OnDoubleTap;
+        TapSwipeDetector.OnSwipe += OnSwipeDefault;
+        TapSwipeDetector.OnTap += OnTapDefault;
+        TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
     }
 
     public void OnSelectScanning() {
+        print("Scanning. Moving to New Map Mode.");
         SM.instance.SwitchModes(scanningMode);
     }
 
     public void OnSelectLocalizing() {
+        print("Localizing. Moving to Load Map Menu.");
         SM.instance.SwitchModes(localizingMode);
     }
 }

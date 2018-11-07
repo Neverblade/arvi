@@ -9,15 +9,15 @@ public abstract class Mode : MonoBehaviour {
 
     public abstract void CleanupMode();
 
-    public void OnSingleTap() {
+    public void OnTapDefault() {
         OutputElementName(SM.instance.elements[SM.instance.index]);
     }
 
-    public void OnDoubleTap() {
+    public void OnDoubleTapDefault() {
         SM.instance.elements[SM.instance.index].function();
     }
 
-    public void OnSwipe(SwipeData swipeData) {
+    public void OnSwipeDefault(SwipeData swipeData) {
         SwipeDirection dir = swipeData.Direction;
         if (dir == SwipeDirection.Left || dir == SwipeDirection.Right) {
             OnSwipeHorizontal(dir);
@@ -36,6 +36,6 @@ public abstract class Mode : MonoBehaviour {
     }
 
     public void OutputElementName(SM.Element element) {
-        print(element.name);
+        print("Focused element: " + element.name);
     }
 }
