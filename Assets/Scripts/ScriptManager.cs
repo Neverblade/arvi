@@ -56,6 +56,6 @@ public class ScriptManager : MonoBehaviour {
 
     // TODO: Add text-to-speech support
     public void OutputText(string text) {
-        print("AUDIO: " + text);
+        Debug.Log("AUDIO: " + text);
     }
 }

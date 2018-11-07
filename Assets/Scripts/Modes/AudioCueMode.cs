@@ -40,12 +40,12 @@ public class AudioCueMode : Mode {
     }
 
     public void OnSelectAudioCueList() {
-        print("Selecting audio cue. Moving to New Map Mode.");
+        Debug.Log("Selecting audio cue. Moving to New Map Mode.");
         SM.instance.SwitchModes(newMapMode);
     }
 
     public void OnSelectCancel() {
-        print("Cancelling. Moving to New Map Mode.");
+        Debug.Log("Cancelling. Moving to New Map Mode.");
         SM.instance.SwitchModes(newMapMode);
     }
 }

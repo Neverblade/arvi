@@ -41,12 +41,12 @@ public class MainMenuMode : Mode {
     }
 
     public void OnSelectScanning() {
-        print("Scanning. Moving to New Map Mode.");
+        Debug.Log("Scanning. Moving to New Map Mode.");
         SM.instance.SwitchModes(scanningMode);
     }
 
     public void OnSelectLocalizing() {
-        print("Localizing. Moving to Load Map Menu.");
+        Debug.Log("Localizing. Moving to Load Map Menu.");
         SM.instance.SwitchModes(localizingMode);
     }
 }

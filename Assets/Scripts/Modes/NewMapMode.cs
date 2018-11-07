@@ -42,18 +42,18 @@ public class NewMapMode : Mode {
     }
 
     public void OnSelectAddAudioCue() {
-        print("Adding audio cue. Moving to Audio Cue Menu.");
+        Debug.Log("Adding audio cue. Moving to Audio Cue Menu.");
         SM.instance.SwitchModes(audioCueMode);
     }
 
     public void OnSelectCancel() {
-        print("Canceling. Moving to main menu.");
+        Debug.Log("Canceling. Moving to main menu.");
         // TODO: Remove any other gameobjects or what not
         SM.instance.SwitchModes(mainMenuMode);
     }
 
     public void OnSelectSave() {
-        print("Saving. Moving to main menu.");
+        Debug.Log("Saving. Moving to main menu.");
         // TODO: Placenote saving, clean up stuff
         SM.instance.SwitchModes(mainMenuMode);
     }
