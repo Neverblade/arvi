@@ -29,11 +29,15 @@ public class MainMenuMode : Mode {
         elements.Add(new SM.Element("Scanning", OnSelectScanning));
         elements.Add(new SM.Element("Localizing", OnSelectLocalizing));
         SM.instance.elements = elements;
+        SM.instance.index = 0;
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;
         TapSwipeDetector.OnTap += OnTapDefault;
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
+
+        // Output current element name
+        OutputElementName(SM.instance.elements[SM.instance.index]);
     }
 
     public void OnSelectScanning() {

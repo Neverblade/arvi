@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using SM = ScriptManager;
 
-public class NewMapMode : Mode {
+public class AudioCueMode : Mode {
 
-    public GameObject newMapPanel;
-    public Mode mainMenuMode;
-    public Mode audioCueMode;
+    public GameObject audioCuePanel;
+    public Mode newMapMode;
 
     public override void CleanupMode() {
-        newMapPanel.SetActive(false);
+        audioCuePanel.SetActive(false);
 
         // Clean up elements
         SM.instance.elements.Clear();
@@ -22,12 +21,11 @@ public class NewMapMode : Mode {
     }
 
     public override void SetupMode() {
-        newMapPanel.SetActive(true);
+        audioCuePanel.SetActive(true);
 
         // Set up elements
         List<SM.Element> elements = new List<SM.Element>();
-        elements.Add(new SM.Element("Add audio cue", OnSelectAddAudioCue));
-        elements.Add(new SM.Element("Save map", OnSelectSave));
+        elements.Add(new SM.Element("Audio cue list", OnSelectAudioCueList));
         elements.Add(new SM.Element("Cancel", OnSelectCancel));
         SM.instance.elements = elements;
         SM.instance.index = 0;
@@ -41,20 +39,13 @@ public class NewMapMode : Mode {
         OutputElementName(SM.instance.elements[SM.instance.index]);
     }
 
-    public void OnSelectAddAudioCue() {
-        print("Adding audio cue. Moving to Audio Cue Menu.");
-        SM.instance.SwitchModes(audioCueMode);
+    public void OnSelectAudioCueList() {
+        print("Selecting audio cue. Moving to New Map Mode.");
+        SM.instance.SwitchModes(newMapMode);
     }
 
     public void OnSelectCancel() {
-        print("Canceling. Moving to main menu.");
-        // TODO: Remove any other gameobjects or what not
-        SM.instance.SwitchModes(mainMenuMode);
-    }
-
-    public void OnSelectSave() {
-        print("Saving. Moving to main menu.");
-        // TODO: Placenote saving, clean up stuff
-        SM.instance.SwitchModes(mainMenuMode);
+        print("Cancelling. Moving to New Map Mode.");
+        SM.instance.SwitchModes(newMapMode);
     }
 }
