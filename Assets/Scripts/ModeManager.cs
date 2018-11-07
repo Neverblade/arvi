@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.iOS;
 
 /**
  * Main controller for ARVI.
  */
-public class ScriptManager : MonoBehaviour {
+public class ModeManager : MonoBehaviour {
 
-    public static ScriptManager instance;
+    // Singleton
+    public static ModeManager instance;
 
-    // Struct for elements of a mode
+    // UI Elements
     public delegate void Func();
     public struct Element {
         public string name;
@@ -20,32 +22,27 @@ public class ScriptManager : MonoBehaviour {
             this.function = function;
         }
     }
-
-    // Current list of elements in the scene
     public List<Element> elements;
-
-    // Currently focused element
     public int index;
 
-    // Mode that's used when the application starts.
+    // Modes
     public Mode startingMode;
-
-    // The current mode
     private Mode currentMode;
 
     private void Start() {
+        // Singleton handling
         if (instance == null) {
             instance = this;
-        } else {
-            if (instance != this) {
-                Destroy(this);
-            }
+        } else if (instance != this) {
+            Destroy(this);
         }
 
+        // TODO: Placenote setup
+
+        // Start at the main menu
         startingMode.SetupMode();
         currentMode = startingMode;
 
-        // TODO: ARKIt setup, Placenote setup
     }
 
     public void SwitchModes(Mode nextMode) {
