@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SM = ModeManager;
+using MM = ModeManager;
 
 public class NewMapMode : Mode {
 
@@ -13,7 +13,7 @@ public class NewMapMode : Mode {
         newMapPanel.SetActive(false);
 
         // Clean up elements
-        SM.instance.elements.Clear();
+        MM.instance.elements.Clear();
 
         // Clean up event handler
         TapSwipeDetector.OnSwipe -= OnSwipeDefault;
@@ -25,12 +25,12 @@ public class NewMapMode : Mode {
         newMapPanel.SetActive(true);
 
         // Set up elements
-        List<SM.Element> elements = new List<SM.Element>();
-        elements.Add(new SM.Element("Add audio cue", OnSelectAddAudioCue));
-        elements.Add(new SM.Element("Save map", OnSelectSave));
-        elements.Add(new SM.Element("Cancel", OnSelectCancel));
-        SM.instance.elements = elements;
-        SM.instance.index = 0;
+        List<MM.Element> elements = new List<MM.Element>();
+        elements.Add(new MM.Element("Add audio cue", OnSelectAddAudioCue));
+        elements.Add(new MM.Element("Save map", OnSelectSave));
+        elements.Add(new MM.Element("Cancel", OnSelectCancel));
+        MM.instance.elements = elements;
+        MM.instance.index = 0;
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;
@@ -43,18 +43,18 @@ public class NewMapMode : Mode {
 
     public void OnSelectAddAudioCue() {
         Debug.Log("Adding audio cue. Moving to Audio Cue Menu.");
-        SM.instance.SwitchModes(audioCueMode);
+        MM.instance.SwitchModes(audioCueMode);
     }
 
     public void OnSelectCancel() {
         Debug.Log("Canceling. Moving to main menu.");
         // TODO: Remove any other gameobjects or what not
-        SM.instance.SwitchModes(mainMenuMode);
+        MM.instance.SwitchModes(mainMenuMode);
     }
 
     public void OnSelectSave() {
         Debug.Log("Saving. Moving to main menu.");
         // TODO: Placenote saving, clean up stuff
-        SM.instance.SwitchModes(mainMenuMode);
+        MM.instance.SwitchModes(mainMenuMode);
     }
 }

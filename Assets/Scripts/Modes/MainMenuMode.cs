@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SM = ModeManager;
+using MM = ModeManager;
+using PM = PlacenoteManager;
 
 public class MainMenuMode : Mode {
 
@@ -13,7 +14,7 @@ public class MainMenuMode : Mode {
         mainMenuPanel.SetActive(false);
 
         // Clean up elements
-        SM.instance.elements.Clear();
+        MM.instance.elements.Clear();
 
         // Clean up event handlers
         TapSwipeDetector.OnSwipe -= OnSwipeDefault;
@@ -25,11 +26,11 @@ public class MainMenuMode : Mode {
         mainMenuPanel.SetActive(true);
         
         // Set up elements
-        List<SM.Element> elements = new List<SM.Element>();
-        elements.Add(new SM.Element("Scanning", OnSelectScanning));
-        elements.Add(new SM.Element("Localizing", OnSelectLocalizing));
-        SM.instance.elements = elements;
-        SM.instance.index = 0;
+        List<MM.Element> elements = new List<MM.Element>();
+        elements.Add(new MM.Element("Scanning", OnSelectScanning));
+        elements.Add(new MM.Element("Localizing", OnSelectLocalizing));
+        MM.instance.elements = elements;
+        MM.instance.index = 0;
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;
@@ -41,12 +42,17 @@ public class MainMenuMode : Mode {
     }
 
     public void OnSelectScanning() {
-        Debug.Log("Scanning. Moving to New Map Mode.");
-        SM.instance.SwitchModes(scanningMode);
+        bool success = PM.instance.CreateNewSession();
+        if (success) {
+            Debug.Log("Scanning. Moving to New Map Mode.");
+            MM.instance.SwitchModes(scanningMode);
+        } else {
+            MM.instance.OutputText("ARVI is still loading, please wait.");
+        }
     }
 
     public void OnSelectLocalizing() {
         Debug.Log("Localizing. Moving to Load Map Menu.");
-        SM.instance.SwitchModes(localizingMode);
+        MM.instance.SwitchModes(localizingMode);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SM = ModeManager;
+using MM = ModeManager;
 
 public class AudioCueMode : Mode {
 
@@ -12,7 +12,7 @@ public class AudioCueMode : Mode {
         audioCuePanel.SetActive(false);
 
         // Clean up elements
-        SM.instance.elements.Clear();
+        MM.instance.elements.Clear();
 
         // Clean up event handler
         TapSwipeDetector.OnSwipe -= OnSwipeDefault;
@@ -24,11 +24,11 @@ public class AudioCueMode : Mode {
         audioCuePanel.SetActive(true);
 
         // Set up elements
-        List<SM.Element> elements = new List<SM.Element>();
-        elements.Add(new SM.Element("Audio cue list", OnSelectAudioCueList));
-        elements.Add(new SM.Element("Cancel", OnSelectCancel));
-        SM.instance.elements = elements;
-        SM.instance.index = 0;
+        List<MM.Element> elements = new List<MM.Element>();
+        elements.Add(new MM.Element("Audio cue list", OnSelectAudioCueList));
+        elements.Add(new MM.Element("Cancel", OnSelectCancel));
+        MM.instance.elements = elements;
+        MM.instance.index = 0;
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;
@@ -41,11 +41,11 @@ public class AudioCueMode : Mode {
 
     public void OnSelectAudioCueList() {
         Debug.Log("Selecting audio cue. Moving to New Map Mode.");
-        SM.instance.SwitchModes(newMapMode);
+        MM.instance.SwitchModes(newMapMode);
     }
 
     public void OnSelectCancel() {
         Debug.Log("Cancelling. Moving to New Map Mode.");
-        SM.instance.SwitchModes(newMapMode);
+        MM.instance.SwitchModes(newMapMode);
     }
 }

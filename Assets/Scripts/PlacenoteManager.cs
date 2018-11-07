@@ -15,6 +15,7 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     private UnityARSessionNativeInterface arSession;
     private bool ARInit = false;
     private LibPlacenote.MapMetadataSettable currMapDetails;
+    private bool reportDebug = false;
     private LibPlacenote.MapInfo selectedMapInfo;
     private string selectedMapId {
         get {
@@ -22,6 +23,45 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
         }
     }
     private string saveMapId = null;
+
+    #region Public Functions
+
+    /**
+     * Starts a new map for the scanning process.
+     * Returns true iff successful.
+     */
+    public bool CreateNewSession() {
+        ConfigureSession();
+        if (!LibPlacenote.Instance.Initialized()) {
+            OutputPlacenoteText("SDK not yet initialized");
+            return false;
+        }
+
+        OutputPlacenoteText("Started Session");
+        LibPlacenote.Instance.StartSession();
+
+        if (reportDebug) {
+            LibPlacenote.Instance.StartRecordDataset(
+                (completed, faulted, percentage) => {
+                    if (completed) {
+                        Debug.Log("Dataset Upload Complete");
+                    }
+                    else if (faulted) {
+                        Debug.Log("Dataset Upload Faulted");
+                    }
+                    else {
+                        Debug.Log("Dataset Upload: (" + percentage.ToString("F2") + "/1.0)");
+                    }
+                });
+            Debug.Log("Started Debug Report");
+        }
+
+        return true;
+    }
+
+    #endregion
+
+    #region Boilerplate
 
     private void Start() {
         // Singleton handling
@@ -41,9 +81,21 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     private void Update() {
         if (!ARInit && LibPlacenote.Instance.Initialized()) {
             ARInit = true;
-            OutputText("Ready to start!");
+            OutputPlacenoteText("ARVI has finished loading, ready to start!");
         }
     }
+
+    /**
+     * For outputting status updates and other information.
+     * This might turn into text-to-speech, or a label up top, etc.
+     */
+    private void OutputPlacenoteText(string text) {
+        Debug.Log("PLACENOTE: " + text);
+    }
+
+    #endregion
+
+    #region Placenote Magic
 
     private void StartARKit() {
 #if !UNITY_EDITOR
@@ -69,14 +121,14 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     public void OnStatusChange(LibPlacenote.MappingStatus prevStatus, LibPlacenote.MappingStatus currStatus) {
         Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
         if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST) {
-            OutputText("Localized");
+            OutputPlacenoteText("Localized");
             //mAudioCueManager.LoadAudioCuesJSON(mSelectedMapInfo.metadata.userdata); // CHANGED
         }
         else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING) {
-            OutputText("Mapping: Tap to add audio cues");
+            OutputPlacenoteText("Mapping: Tap to add audio cues");
         }
         else if (currStatus == LibPlacenote.MappingStatus.LOST) {
-            OutputText("Searching for position lock");
+            OutputPlacenoteText("Searching for position lock");
         }
         else if (currStatus == LibPlacenote.MappingStatus.WAITING) {
             if (audioCueManager.audioCueObjList.Count != 0) { // CHANGED
@@ -85,11 +137,5 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
         }
     }
 
-    /**
-     * For outputting status updates and other information.
-     * This might turn into text-to-speech, or a label up top, etc.
-     */
-    public void OutputText(string text) {
-        Debug.Log("PLACENOTE: " + text);
-    }
+    #endregion
 }
