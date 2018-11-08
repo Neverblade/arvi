@@ -64,11 +64,11 @@ public class AudioCueManager : MonoBehaviour {
         audioCueInfo.position = position;
         audioCueInfoList.Add(audioCueInfo);
 
-        GameObject audioCue = AudioCueFromInfo(audioCueInfo);
+        GameObject audioCue = CreateAudioCueFromInfo(audioCueInfo);
         audioCueObjList.Add(audioCue);
     }
 
-    public GameObject AudioCueFromInfo(AudioCueInfo info) {
+    public GameObject CreateAudioCueFromInfo(AudioCueInfo info) {
         GameObject audioCueObj = Instantiate(audioCuePrefab, info.position, Quaternion.identity);
         audioCueObj.GetComponent<AudioSource>().clip = audioLibrary.GetAudioClip(info.id);
         audioCueObj.GetComponent<AudioSource>().Play();
@@ -104,7 +104,7 @@ public class AudioCueManager : MonoBehaviour {
 
             foreach (AudioCueInfo audioCueInfo in audioCueList.audioCues) {
                 audioCueInfoList.Add(audioCueInfo);
-                GameObject audioCue = AudioCueFromInfo(audioCueInfo);
+                GameObject audioCue = CreateAudioCueFromInfo(audioCueInfo);
                 audioCueObjList.Add(audioCue);
             }
         }
@@ -153,26 +153,6 @@ public class AudioCueManager : MonoBehaviour {
             playingAudioInfoElement = null;
             element.TurnOff();
         }
-    }
-
-    #endregion
-
-    #region UI Calls
-
-    /**
-     * CURRENTLY UNUSED.
-     * Clicked the cancel button.
-     */
-    public void OnClickCancel() {
-        
-    }
-
-    /**
-     * CURRENTLY UNUSED.
-     * Clicked the select button.
-     */
-    public void OnClickSelect() {
-
     }
 
     #endregion
