@@ -20,11 +20,12 @@ public abstract class Mode : MonoBehaviour {
     public void OnSwipeDefault(SwipeData swipeData) {
         SwipeDirection dir = swipeData.Direction;
         if (dir == SwipeDirection.Left || dir == SwipeDirection.Right) {
-            OnSwipeHorizontal(dir);
+            SwitchElements(dir);
+            OutputCurrentElement();
         }
     }
 
-    public void OnSwipeHorizontal(SwipeDirection dir) {
+    public void SwitchElements(SwipeDirection dir) {
         if (dir == SwipeDirection.Left) {
             MM.instance.index -= 1;
             MM.instance.index += MM.instance.elements.Count;
@@ -32,6 +33,5 @@ public abstract class Mode : MonoBehaviour {
             MM.instance.index += 1;
         }
         MM.instance.index = MM.instance.index % MM.instance.elements.Count;
-        OutputCurrentElement();
     }
 }

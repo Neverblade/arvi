@@ -243,7 +243,7 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
         Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
         if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST) {
             OutputPlacenoteText("Localized");
-            //mAudioCueManager.LoadAudioCuesJSON(mSelectedMapInfo.metadata.userdata); // CHANGED
+            AM.instance.LoadAudioCuesJSON(selectedMapInfo.metadata.userdata);
         }
         else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING) {
             OutputPlacenoteText("Mapping: Tap to add audio cues");
@@ -252,9 +252,9 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
             OutputPlacenoteText("Searching for position lock");
         }
         else if (currStatus == LibPlacenote.MappingStatus.WAITING) {
-            //if (audioCueManager.audioCueObjList.Count != 0) { // CHANGED
-            //    audioCueManager.ClearAudioCues(); // CHANGED
-            //}
+            if (AM.instance.audioCueObjList.Count != 0) {
+                AM.instance.ClearAudioCues();
+            }
         }
     }
 

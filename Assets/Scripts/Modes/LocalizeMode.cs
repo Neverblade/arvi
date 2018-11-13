@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MM = ModeManager;
 using PM = PlacenoteManager;
+using AM = AudioCueManagerV2;
 
 public class LocalizeMode : Mode
 {
@@ -39,6 +40,7 @@ public class LocalizeMode : Mode
     public void OnSelectCancel()
     {
         Debug.Log("Cancelling. Moving to MainList Mode.");
+        AM.instance.ClearAudioCues();
         MM.instance.SwitchModes(mapListMode);
     }
 

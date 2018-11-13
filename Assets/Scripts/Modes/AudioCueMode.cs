@@ -27,7 +27,7 @@ public class AudioCueMode : Mode {
         }
 
         // Clean up event handler
-        TapSwipeDetector.OnSwipe -= OnSwipeDefault;
+        TapSwipeDetector.OnSwipe -= OnHorizontalSwipe;
         TapSwipeDetector.OnSwipe -= OnVerticalSwipe;
         TapSwipeDetector.OnTap -= OnAudioCueListTap;
         TapSwipeDetector.OnDoubleTap -= OnDoubleTapDefault;
@@ -54,13 +54,40 @@ public class AudioCueMode : Mode {
         MM.instance.index = 0;
 
         // Set up event handlers
-        TapSwipeDetector.OnSwipe += OnSwipeDefault;
+        TapSwipeDetector.OnSwipe += OnHorizontalSwipe;
         TapSwipeDetector.OnSwipe += OnVerticalSwipe;
         TapSwipeDetector.OnTap += OnAudioCueListTap;
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
 
         // Output current element name
-        OutputCurrentElement();
+        SpecialOutputElement();
+    }
+
+    /**
+     * For iterating between UI elements, with some special casing.
+     */
+    public void OnHorizontalSwipe(SwipeData swipeData) {
+        // Only trigger on left/right swipes
+        if (swipeData.Direction != SwipeDirection.Left
+            && swipeData.Direction != SwipeDirection.Right) {
+            return;
+        }
+
+        SwitchElements(swipeData.Direction);
+        SpecialOutputElement();
+    }
+
+    /**
+     * Outputs the element name, with special casing to output the audio cue
+     * name when the audio cue list is selected.
+     */
+    private void SpecialOutputElement() {
+        if (MM.instance.elements[MM.instance.index].name.Equals(AUDIO_CUE_LIST_NAME)) {
+            Audio audio = AudioLibrary.instance.library[audioLibraryIndex];
+            MM.instance.OutputText(AUDIO_CUE_LIST_NAME + ", " + audio.id);
+        } else {
+            OutputCurrentElement();
+        }
     }
 
     /**

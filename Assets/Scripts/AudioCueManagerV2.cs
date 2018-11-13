@@ -10,8 +10,8 @@ public class AudioCueManagerV2 : MonoBehaviour {
     public GameObject audioCuePrefab;
 
     private GameObject candidateAudioCue;
-    private List<AudioCueInfo> audioCueInfoList = new List<AudioCueInfo>();
-    private List<GameObject> audioCueObjList = new List<GameObject>();
+    public List<AudioCueInfo> audioCueInfoList = new List<AudioCueInfo>();
+    public List<GameObject> audioCueObjList = new List<GameObject>();
     private Audio storedAudio;
 
     private void Start() {
@@ -96,6 +96,30 @@ public class AudioCueManagerV2 : MonoBehaviour {
         }
         audioCueObjList.Clear();
         audioCueInfoList.Clear();
+    }
+
+    public GameObject CreateAudioCueFromInfo(AudioCueInfo info) {
+        GameObject audioCueObj = Instantiate(audioCuePrefab, info.position, Quaternion.identity);
+        audioCueObj.GetComponent<AudioSource>().clip = AudioLibrary.instance.GetAudioClip(info.id);
+        audioCueObj.GetComponent<AudioSource>().Play();
+        return audioCueObj;
+    }
+
+    public void LoadAudioCuesJSON(JToken mapMetadata) {
+        ClearAudioCues();
+        if (mapMetadata is JObject && mapMetadata[AUDIO_CUE_LIST_NAME] is JObject) {
+            AudioCueList audioCueList = mapMetadata[AUDIO_CUE_LIST_NAME].ToObject<AudioCueList>();
+            if (audioCueList.audioCues == null) {
+                Debug.Log("No audio cues dropped.");
+                return;
+            }
+
+            foreach (AudioCueInfo audioCueInfo in audioCueList.audioCues) {
+                audioCueInfoList.Add(audioCueInfo);
+                GameObject audioCue = CreateAudioCueFromInfo(audioCueInfo);
+                audioCueObjList.Add(audioCue);
+            }
+        }
     }
 
     public JObject AudioCuesToJSON() {
