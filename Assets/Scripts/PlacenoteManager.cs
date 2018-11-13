@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.XR.iOS;
 
@@ -16,13 +17,16 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     private bool ARInit = false;
     private LibPlacenote.MapMetadataSettable currMapDetails;
     private bool reportDebug = false;
-    private LibPlacenote.MapInfo selectedMapInfo;
-    private string selectedMapId {
+    [HideInInspector] public LibPlacenote.MapInfo selectedMapInfo;
+    [HideInInspector] public string selectedMapId {
         get {
             return selectedMapInfo != null ? selectedMapInfo.placeId : null;
         }
     }
     private string saveMapId = null;
+
+    [HideInInspector] public List<LibPlacenote.MapInfo> mMapList = new List<LibPlacenote.MapInfo>(); //changed
+    [HideInInspector] public int mMapListIdx = 0; //changed
 
     #region Public Functions
 
@@ -55,10 +59,77 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
                 });
             Debug.Log("Started Debug Report");
         }
-
         return true;
     }
 
+    public bool LoadMapList(){
+        if (!LibPlacenote.Instance.Initialized())
+        {
+            Debug.Log("SDK not yet initialized");
+            return false;
+        }
+        //I leave all map now for easier testing, will change to search api to filter maps later on
+        LibPlacenote.Instance.ListMaps((mapList) => {
+            // render the map list!
+            foreach (LibPlacenote.MapInfo mapInfoItem in mapList)
+            {
+                if (mapInfoItem.metadata.userdata != null)
+                {
+                    Debug.Log(mapInfoItem.metadata.userdata.ToString(Formatting.None));
+                }
+                mMapList.Add(mapInfoItem); //changed
+            }
+        });
+        return true;
+    }
+
+    public bool StartLocalize(){
+        ConfigureSession();
+
+        if (!LibPlacenote.Instance.Initialized())
+        {
+            Debug.Log("SDK not yet initialized");
+            return false;
+        }
+
+        LibPlacenote.Instance.LoadMap(selectedMapId,
+            (completed, faulted, percentage) => {
+                if (completed)
+                {
+                    LibPlacenote.Instance.StartSession(true);
+                    
+                    LibPlacenote.Instance.StartRecordDataset(
+                        (datasetCompleted, datasetFaulted, datasetPercentage) => {
+
+                            if (datasetCompleted)
+                            {
+                                Debug.Log("Dataset Upload Complete");
+                            }
+                            else if (datasetFaulted)
+                            {
+                                Debug.Log("Dataset Upload Faulted");
+                            }
+                            else
+                            {
+                                Debug.Log("Dataset Upload: " + datasetPercentage.ToString("F2") + "/1.0");
+                            }
+                    });
+
+                    Debug.Log("Loaded ID: " + selectedMapId);
+                }
+                else if (faulted)
+                {
+                    Debug.Log("Failed to load ID: " + selectedMapId);
+                }
+                else
+                {
+                    Debug.Log("Map Download: " + percentage.ToString("F2") + "/1.0");
+                }
+            }
+        );
+        return true;
+
+    }
     #endregion
 
     #region Boilerplate

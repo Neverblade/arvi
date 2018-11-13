@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using MM = ModeManager;
+using PM = PlacenoteManager;
 
 public class LocalizeMode : Mode
 {
@@ -27,6 +28,9 @@ public class LocalizeMode : Mode
         // Set up event handlers
         TapSwipeDetector.OnTap += OutputCurrentElement;
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
+
+        //Calling Placenote to localize
+        PM.instance.StartLocalize();
 
         // Output current element name
         OutputCurrentElement();
