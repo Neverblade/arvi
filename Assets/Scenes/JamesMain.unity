@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2046,6 +2046,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioCuePanel: {fileID: 2100287583}
+  audioInfoElementPrefab: {fileID: 1354167549365116, guid: dd18c5a3672245a4e99dea84587ea0d4,
+    type: 2}
   newMapMode: {fileID: 2100053591}
 --- !u!4 &1948576505 stripped
 Transform:
@@ -2273,8 +2275,9 @@ GameObject:
   - component: {fileID: 2026431331}
   - component: {fileID: 2026431332}
   - component: {fileID: 2026431333}
-  - component: {fileID: 2026431335}
   - component: {fileID: 2026431334}
+  - component: {fileID: 2026431335}
+  - component: {fileID: 2026431336}
   m_Layer: 0
   m_Name: ScriptManager
   m_TagString: Untagged
@@ -2330,7 +2333,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7677811242793304da7fba1516b5eec5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioCueManager: {fileID: 2026431335}
+  selectedMapInfo:
+    placeId: 
+    metadata:
+      name: 
+      location:
+        latitude: 0
+        longitude: 0
+        altitude: 0
+      created: 0
+  mMapList: []
+  mMapListIdx: 0
 --- !u!114 &2026431335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2339,17 +2352,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 2026431330}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40f835ea891af7243b779157aff11ff3, type: 3}
+  m_Script: {fileID: 11500000, guid: c2d3f27b5573a504da8a7964a20465b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioCuePrefab: {fileID: 0}
-  audioInfoElementPrefab: {fileID: 0}
-  audioListPanel: {fileID: 0}
-  audioListContentPanel: {fileID: 0}
-  audioCueInfoList: []
-  audioCueObjList: []
-  selectedAudioInfoElement: {fileID: 0}
-  storedPosition: {x: 0, y: 0, z: 0}
+  audioCuePrefab: {fileID: 1077425278966170, guid: 04689430cc23b1a44bf61bc5552da72c,
+    type: 2}
+--- !u!114 &2026431336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2026431330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c69c8d0a33a547488ab1573d23276f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  library:
+  - id: Cube Sound
+    clip: {fileID: 8300000, guid: 80b0a9a39b2896b459a465e4e98c74ee, type: 3}
+  - id: Beam
+    clip: {fileID: 8300000, guid: 1669bf5ebde159f408c70a822bcdd8a6, type: 3}
 --- !u!1 &2031121747
 GameObject:
   m_ObjectHideFlags: 0

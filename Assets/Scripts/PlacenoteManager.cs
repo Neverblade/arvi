@@ -9,9 +9,6 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     // Singleton
     public static PlacenoteManager instance;
 
-    // Audio Cues
-    public AudioCueManager audioCueManager;
-
     // Placenote / ARKit
     private UnityARSessionNativeInterface arSession;
     private bool ARInit = false;
@@ -202,9 +199,9 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
             OutputPlacenoteText("Searching for position lock");
         }
         else if (currStatus == LibPlacenote.MappingStatus.WAITING) {
-            if (audioCueManager.audioCueObjList.Count != 0) { // CHANGED
-                audioCueManager.ClearAudioCues(); // CHANGED
-            }
+            //if (audioCueManager.audioCueObjList.Count != 0) { // CHANGED
+            //    audioCueManager.ClearAudioCues(); // CHANGED
+            //}
         }
     }
 

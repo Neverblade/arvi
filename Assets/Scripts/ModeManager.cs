@@ -22,8 +22,8 @@ public class ModeManager : MonoBehaviour {
             this.function = function;
         }
     }
-    public List<Element> elements;
-    public int index;
+    [HideInInspector] public List<Element> elements;
+    [HideInInspector] public int index;
 
     // Modes
     public Mode startingMode;

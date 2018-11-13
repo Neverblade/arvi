@@ -6,6 +6,7 @@ using MM = ModeManager;
 public class AudioCueMode : Mode {
 
     public GameObject audioCuePanel;
+    public GameObject audioInfoElementPrefab;
     public Mode newMapMode;
 
     public override void CleanupMode() {
@@ -30,6 +31,9 @@ public class AudioCueMode : Mode {
         MM.instance.elements = elements;
         MM.instance.index = 0;
 
+        // Set up audio cue list
+        SetupAudioCueListElements();
+
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;
         TapSwipeDetector.OnTap += OutputCurrentElement;
@@ -47,5 +51,22 @@ public class AudioCueMode : Mode {
     public void OnSelectCancel() {
         Debug.Log("Cancelling. Moving to New Map Mode.");
         MM.instance.SwitchModes(newMapMode);
+    }
+
+    /**
+     * Adds all the possible audio cue elements to the list.
+     */
+    private void SetupAudioCueListElements() {
+        RectTransform contentPanel = (RectTransform) audioCuePanel.transform
+            .Find("AudioListPanel")
+            .Find("Viewport")
+            .Find("Content");
+
+        foreach (Audio audio in AudioLibrary.instance.library) {
+            GameObject element = Instantiate(audioInfoElementPrefab);
+            AudioInfoElementV2 audioInfoElement = element.GetComponent<AudioInfoElementV2>();
+            audioInfoElement.SetId(audio.id);
+            element.transform.SetParent(contentPanel);
+        }
     }
 }

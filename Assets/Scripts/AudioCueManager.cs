@@ -118,7 +118,7 @@ public class AudioCueManager : MonoBehaviour {
      * Fills a panel with AudioCueElements with info from the library.
      */
     public void PopulateAudioList() {
-        foreach (AudioLibrary.Audio audio in audioLibrary.library) {
+        foreach (Audio audio in audioLibrary.library) {
             GameObject element = Instantiate(audioInfoElementPrefab);
             AudioInfoElement audioInfoElement = element.GetComponent<AudioInfoElement>();
             audioInfoElement.id = audio.id;
