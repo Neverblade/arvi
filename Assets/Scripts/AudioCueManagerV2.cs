@@ -47,7 +47,7 @@ public class AudioCueManagerV2 : MonoBehaviour {
     /**
      * Starts playing audio for the candidate audio cue.
      */
-    public void PlaySoundCandidateAudioCue() {
+    public void PlayCandidateAudioCueSound() {
         AudioSource audioSource = candidateAudioCue.GetComponent<AudioSource>();
         audioSource.Play();
     }
@@ -55,7 +55,7 @@ public class AudioCueManagerV2 : MonoBehaviour {
     /**
      * Stops playing audio for the candidate audio cue.
      */
-    public void StopSoundCandidateAudioCueSound() {
+    public void PauseCandidateAudioCueSound() {
         AudioSource audioSource = candidateAudioCue.GetComponent<AudioSource>();
         audioSource.Stop();
     }

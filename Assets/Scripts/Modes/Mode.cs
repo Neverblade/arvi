@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SM = ModeManager;
+using MM = ModeManager;
 
 public abstract class Mode : MonoBehaviour {
 
@@ -10,11 +10,11 @@ public abstract class Mode : MonoBehaviour {
     public abstract void CleanupMode();
 
     public void OutputCurrentElement() {
-        SM.instance.OutputText(SM.instance.elements[SM.instance.index].name);
+        MM.instance.OutputText(MM.instance.elements[MM.instance.index].name);
     }
 
     public void OnDoubleTapDefault() {
-        SM.instance.elements[SM.instance.index].function();
+        MM.instance.elements[MM.instance.index].function();
     }
 
     public void OnSwipeDefault(SwipeData swipeData) {
@@ -26,12 +26,12 @@ public abstract class Mode : MonoBehaviour {
 
     public void OnSwipeHorizontal(SwipeDirection dir) {
         if (dir == SwipeDirection.Left) {
-            SM.instance.index -= 1;
-            SM.instance.index += SM.instance.elements.Count;
+            MM.instance.index -= 1;
+            MM.instance.index += MM.instance.elements.Count;
         } else {
-            SM.instance.index += 1;
+            MM.instance.index += 1;
         }
-        SM.instance.index = SM.instance.index % SM.instance.elements.Count;
+        MM.instance.index = MM.instance.index % MM.instance.elements.Count;
         OutputCurrentElement();
     }
 }

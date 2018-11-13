@@ -22,12 +22,13 @@ public class AudioInfoElementV2 : MonoBehaviour {
         transform.Find("AudioIdLabel").GetComponent<Text>().text = id;
     }
 
-    public void ToggleSprite() {
-        playing = !playing;
-        if (playing) {
-            buttonImage.sprite = pauseSprite;
-        } else {
-            buttonImage.sprite = playSprite;
-        }
+    public void Play() {
+        playing = true;
+        buttonImage.sprite = pauseSprite;
+    }
+
+    public void Pause() {
+        playing = false;
+        buttonImage.sprite = playSprite;
     }
 }

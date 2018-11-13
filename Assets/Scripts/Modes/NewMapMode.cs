@@ -43,11 +43,7 @@ public class NewMapMode : Mode {
 
     public void OnSelectAddAudioCue() {
         Debug.Log("Adding audio cue. Moving to Audio Cue Menu.");
-
-        // Add a temp audio cue in the current location
-
-        // Switch to audio cue mode
-
+        AudioCueManagerV2.instance.PlaceCandidateAudioCue(Camera.main.transform.position);
         MM.instance.SwitchModes(audioCueMode);
     }
 

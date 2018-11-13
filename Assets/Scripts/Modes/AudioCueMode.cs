@@ -2,42 +2,53 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MM = ModeManager;
+using AM = AudioCueManagerV2;
 
 public class AudioCueMode : Mode {
+
+    public static string AUDIO_CUE_LIST_NAME = "Audio cue list";
 
     public GameObject audioCuePanel;
     public GameObject audioInfoElementPrefab;
     public Mode newMapMode;
 
     private RectTransform contentPanel;
-    private int index;
+    private int audioLibraryIndex;
+    private AudioInfoElementV2 storedAudioInfoElement;
+    private bool playingAudio;
 
     public override void CleanupMode() {
         audioCuePanel.SetActive(false);
 
         // Clean up elements
         MM.instance.elements.Clear();
+        foreach (Transform child in contentPanel.transform) {
+            Destroy(child.gameObject);
+        }
 
         // Clean up event handler
         TapSwipeDetector.OnSwipe -= OnSwipeDefault;
         TapSwipeDetector.OnSwipe -= OnVerticalSwipe;
-        TapSwipeDetector.OnTap -= OutputCurrentElement;
+        TapSwipeDetector.OnTap -= OnAudioCueListTap;
         TapSwipeDetector.OnDoubleTap -= OnDoubleTapDefault;
     }
 
     public override void SetupMode() {
         audioCuePanel.SetActive(true);
 
-        // Set up list
+        // Set up list, seed w/ the first element
         contentPanel = (RectTransform) audioCuePanel.transform
-            .Find("AudioListPanel")
-            .Find("Viewport")
-            .Find("Content");
-        AddAudioCueListElement(AudioLibrary.instance.library[index].id);
+                .Find("AudioListPanel")
+                .Find("Viewport")
+                .Find("Content");
+        Audio audio = AudioLibrary.instance.library[audioLibraryIndex];
+        AddAudioCueListElement(audio.id);
+        AM.instance.PauseCandidateAudioCueSound();
+        AM.instance.ChangeCandidateAudioCueClip(audio);
 
         // Set up elements
         List<MM.Element> elements = new List<MM.Element>();
-        elements.Add(new MM.Element("Audio cue list", OnSelectAudioCueList));
+        elements.Add(new MM.Element(AUDIO_CUE_LIST_NAME, OnSelectAudioCueList));
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
         MM.instance.elements = elements;
         MM.instance.index = 0;
@@ -45,7 +56,7 @@ public class AudioCueMode : Mode {
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;
         TapSwipeDetector.OnSwipe += OnVerticalSwipe;
-        TapSwipeDetector.OnTap += OutputCurrentElement;
+        TapSwipeDetector.OnTap += OnAudioCueListTap;
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
 
         // Output current element name
@@ -68,21 +79,55 @@ public class AudioCueMode : Mode {
         }
 
         // Update index
-        index += swipeData.Direction == SwipeDirection.Up ? 1 : -1;
+        audioLibraryIndex += swipeData.Direction == SwipeDirection.Up ? 1 : -1;
         int librarySize = AudioLibrary.instance.library.Length;
-        index = (index + librarySize) % librarySize;
+        audioLibraryIndex = (audioLibraryIndex + librarySize) % librarySize;
 
-        // Update list
-        AddAudioCueListElement(AudioLibrary.instance.library[index].id);
+        // Update list and candidate audio cue
+        Audio audio = AudioLibrary.instance.library[audioLibraryIndex];
+        AddAudioCueListElement(audio.id);
+        AM.instance.PauseCandidateAudioCueSound();
+        AM.instance.ChangeCandidateAudioCueClip(audio);
+
+        // Output current audio cue name
+        MM.instance.OutputText(audio.id);
+    }
+
+    /**
+     * For pausing sound when switching elements.
+     */
+    public void OnHorizontalSwipe() {
+        AM.instance.PauseCandidateAudioCueSound();
+    }
+
+    /**
+     * For toggling sound on an audio cue element.
+     */
+    public void OnAudioCueListTap() {
+        if (!MM.instance.elements[MM.instance.index].name.Equals(AUDIO_CUE_LIST_NAME)) {
+            OutputCurrentElement();
+        } else {
+            playingAudio = !playingAudio;
+            if (playingAudio) {
+                storedAudioInfoElement.Play();
+                AM.instance.PlayCandidateAudioCueSound();
+            } else {
+                storedAudioInfoElement.Pause();
+                AM.instance.PauseCandidateAudioCueSound();
+            }
+        }
     }
 
     public void OnSelectAudioCueList() {
         Debug.Log("Selecting audio cue. Moving to New Map Mode.");
+        AM.instance.PlayCandidateAudioCueSound();
+        AM.instance.ConfirmCandidateAudioCue();
         MM.instance.SwitchModes(newMapMode);
     }
 
     public void OnSelectCancel() {
         Debug.Log("Cancelling. Moving to New Map Mode.");
+        AM.instance.RemoveCandidateAudioCue();
         MM.instance.SwitchModes(newMapMode);
     }
 
@@ -91,8 +136,8 @@ public class AudioCueMode : Mode {
      */
     private void AddAudioCueListElement(string id) {
         GameObject element = Instantiate(audioInfoElementPrefab);
-        AudioInfoElementV2 audioInfoElement = element.GetComponent<AudioInfoElementV2>();
-        audioInfoElement.SetId(id);
+        storedAudioInfoElement = element.GetComponent<AudioInfoElementV2>();
+        storedAudioInfoElement.SetId(id);
         element.transform.SetParent(contentPanel);
     }
 }
