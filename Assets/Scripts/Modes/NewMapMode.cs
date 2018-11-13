@@ -8,6 +8,7 @@ public class NewMapMode : Mode {
 
     public GameObject newMapPanel;
     public Mode mainMenuMode;
+    public Mode saveMapMode;
     public Mode audioCueMode;
 
     public override void CleanupMode() {
@@ -16,7 +17,7 @@ public class NewMapMode : Mode {
         // Clean up elements
         MM.instance.elements.Clear();
 
-        // Clean up event handler
+        // Clean up event handlers
         TapSwipeDetector.OnSwipe -= OnSwipeDefault;
         TapSwipeDetector.OnTap -= OutputCurrentElement;
         TapSwipeDetector.OnDoubleTap -= OnDoubleTapDefault;
@@ -55,9 +56,8 @@ public class NewMapMode : Mode {
     }
 
     public void OnSelectSave() {
-        Debug.Log("Saving. Moving to main menu.");
-        // TODO: Create way of picking a name
-        PlacenoteManager.instance.SaveMap();
-        MM.instance.SwitchModes(mainMenuMode); // not sure if this should be kept
+        Debug.Log("Saving. Moving to save map mode.");
+        //PlacenoteManager.instance.SaveMap();
+        MM.instance.SwitchModes(saveMapMode);
     }
 }

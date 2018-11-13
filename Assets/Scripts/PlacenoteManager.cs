@@ -63,7 +63,7 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     /**
      * Saves the current map.
      */
-    public void SaveMap() {
+    public void SaveMap(string name) {
         if (!LibPlacenote.Instance.Initialized()) {
             OutputPlacenoteText("SDK not yet initialized");
             return;
@@ -80,7 +80,7 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
 
                 // Create metadata
                 LibPlacenote.MapMetadataSettable metadata = new LibPlacenote.MapMetadataSettable();
-                metadata.name = RandomName.Get(); // TODO: Allow users to select names
+                metadata.name = name;
                 JObject userdata = new JObject();
                 metadata.userdata = userdata;
                 JObject audioCueList = AM.instance.AudioCuesToJSON();
@@ -96,8 +96,7 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
                 LibPlacenote.Instance.SetMetadata(mapId, metadata, (success) => {
                     if (success) {
                         Debug.Log("Meta data successfully saved");
-                    }
-                    else {
+                    } else {
                         Debug.Log("Meta data failed to save");
                     }
                 });
