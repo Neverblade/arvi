@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
 public class AudioCueManagerV2 : MonoBehaviour {
 
     public static AudioCueManagerV2 instance;
+    public static string AUDIO_CUE_LIST_NAME = "audioCueList";
 
     public GameObject audioCuePrefab;
 
@@ -87,4 +89,21 @@ public class AudioCueManagerV2 : MonoBehaviour {
     }
 
     #endregion
+
+    public void ClearAudioCues() {
+        foreach (GameObject obj in audioCueObjList) {
+            Destroy(obj);
+        }
+        audioCueObjList.Clear();
+        audioCueInfoList.Clear();
+    }
+
+    public JObject AudioCuesToJSON() {
+        AudioCueList audioCueList = new AudioCueList();
+        audioCueList.audioCues = new AudioCueInfo[audioCueInfoList.Count];
+        for (int i = 0; i < audioCueInfoList.Count; i++) {
+            audioCueList.audioCues[i] = audioCueInfoList[i];
+        }
+        return JObject.FromObject(audioCueList);
+    }
 }

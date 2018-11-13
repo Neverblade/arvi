@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MM = ModeManager;
+using AM = AudioCueManagerV2;
 
 public class NewMapMode : Mode {
 
@@ -27,7 +28,7 @@ public class NewMapMode : Mode {
         // Set up elements
         List<MM.Element> elements = new List<MM.Element>();
         elements.Add(new MM.Element("Add audio cue", OnSelectAddAudioCue));
-        elements.Add(new MM.Element("Save map", OnSelectSave));
+        elements.Add(new MM.Element("Save", OnSelectSave));
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
         MM.instance.elements = elements;
         MM.instance.index = 0;
@@ -49,13 +50,14 @@ public class NewMapMode : Mode {
 
     public void OnSelectCancel() {
         Debug.Log("Canceling. Moving to main menu.");
-        // TODO: Remove any other gameobjects or what not
+        AM.instance.ClearAudioCues();
         MM.instance.SwitchModes(mainMenuMode);
     }
 
     public void OnSelectSave() {
         Debug.Log("Saving. Moving to main menu.");
-        // TODO: Placenote saving, clean up stuff
-        MM.instance.SwitchModes(mainMenuMode);
+        // TODO: Create way of picking a name
+        PlacenoteManager.instance.SaveMap();
+        MM.instance.SwitchModes(mainMenuMode); // not sure if this should be kept
     }
 }

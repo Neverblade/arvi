@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.XR.iOS;
+using AM = AudioCueManagerV2;
 
 public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
 
@@ -12,7 +14,7 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     // Placenote / ARKit
     private UnityARSessionNativeInterface arSession;
     private bool ARInit = false;
-    private LibPlacenote.MapMetadataSettable currMapDetails;
+    private LibPlacenote.MapMetadataSettable storedMapMetadata;
     private bool reportDebug = false;
     [HideInInspector] public LibPlacenote.MapInfo selectedMapInfo;
     [HideInInspector] public string selectedMapId {
@@ -20,7 +22,6 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
             return selectedMapInfo != null ? selectedMapInfo.placeId : null;
         }
     }
-    private string saveMapId = null;
 
     [HideInInspector] public List<LibPlacenote.MapInfo> mMapList = new List<LibPlacenote.MapInfo>(); //changed
     [HideInInspector] public int mMapListIdx = 0; //changed
@@ -57,6 +58,59 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
             Debug.Log("Started Debug Report");
         }
         return true;
+    }
+
+    /**
+     * Saves the current map.
+     */
+    public void SaveMap() {
+        if (!LibPlacenote.Instance.Initialized()) {
+            OutputPlacenoteText("SDK not yet initialized");
+            return;
+        }
+
+        bool useLocation = Input.location.status == LocationServiceStatus.Running;
+        LocationInfo locationInfo = Input.location.lastData;
+
+        OutputPlacenoteText("Saving scan.");
+        LibPlacenote.Instance.SaveMap(
+            (mapId) => {
+                LibPlacenote.Instance.StopSession();
+                FeaturesVisualizer.clearPointcloud();
+
+                // Create metadata
+                LibPlacenote.MapMetadataSettable metadata = new LibPlacenote.MapMetadataSettable();
+                metadata.name = RandomName.Get(); // TODO: Allow users to select names
+                JObject userdata = new JObject();
+                metadata.userdata = userdata;
+                JObject audioCueList = AM.instance.AudioCuesToJSON();
+                userdata[AM.AUDIO_CUE_LIST_NAME] = audioCueList;
+                AM.instance.ClearAudioCues();
+                if (useLocation) {
+                    metadata.location = new LibPlacenote.MapLocation();
+                    metadata.location.latitude = locationInfo.latitude;
+                    metadata.location.longitude = locationInfo.longitude;
+                    metadata.location.altitude = locationInfo.altitude;
+                }
+
+                LibPlacenote.Instance.SetMetadata(mapId, metadata, (success) => {
+                    if (success) {
+                        Debug.Log("Meta data successfully saved");
+                    }
+                    else {
+                        Debug.Log("Meta data failed to save");
+                    }
+                });
+                storedMapMetadata = metadata;
+            },
+            (completed, faulted, percentage) => {
+                if (completed) {
+                    OutputPlacenoteText("Upload Complete:" + storedMapMetadata.name);
+                } else if (faulted) {
+                    OutputPlacenoteText("Upload of Map Named: " + storedMapMetadata.name + "faulted");
+                }
+            }
+        );
     }
 
     public bool LoadMapList(){
