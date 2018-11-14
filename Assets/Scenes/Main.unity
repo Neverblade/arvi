@@ -2747,7 +2747,7 @@ GameObject:
   - component: {fileID: 1123234583}
   - component: {fileID: 1123234584}
   m_Layer: 0
-  m_Name: LoacalizeMode
+  m_Name: LocalizeMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2777,6 +2777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f6fde1ce2a484d8fa81ce0f701b3194, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  localizePanel: {fileID: 376352829}
   mapListMode: {fileID: 1899792881}
 --- !u!1 &1133733954
 GameObject:
@@ -4305,6 +4306,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioCuePrefab: {fileID: 1077425278966170, guid: 04689430cc23b1a44bf61bc5552da72c,
     type: 2}
+  audioCueInfoList: []
+  audioCueObjList: []
 --- !u!114 &2026431336
 MonoBehaviour:
   m_ObjectHideFlags: 0

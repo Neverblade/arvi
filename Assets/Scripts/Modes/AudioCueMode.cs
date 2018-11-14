@@ -111,6 +111,7 @@ public class AudioCueMode : Mode {
         audioLibraryIndex = (audioLibraryIndex + librarySize) % librarySize;
 
         // Update list and candidate audio cue
+        playingAudio = false;
         Audio audio = AudioLibrary.instance.library[audioLibraryIndex];
         AddAudioCueListElement(audio.id);
         AM.instance.PauseCandidateAudioCueSound();

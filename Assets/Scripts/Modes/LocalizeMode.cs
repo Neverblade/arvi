@@ -6,10 +6,13 @@ using AM = AudioCueManagerV2;
 
 public class LocalizeMode : Mode
 {
+    public GameObject localizePanel;
     public Mode mapListMode;
 
     public override void CleanupMode()
     {
+        localizePanel.SetActive(false);
+
         // Clean up elements
         MM.instance.elements.Clear();
 
@@ -20,6 +23,8 @@ public class LocalizeMode : Mode
 
     public override void SetupMode()
     {
+        localizePanel.SetActive(true);
+
         // Set up elements
         List<MM.Element> elements = new List<MM.Element>();
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
