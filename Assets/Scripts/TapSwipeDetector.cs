@@ -19,8 +19,11 @@ public class TapSwipeDetector : MonoBehaviour
     private float clickQuota = 0;
 
     private void Update() {
-        UpdateTouch();
+#if UNITY_EDITOR
         UpdateMouse();
+#else
+        UpdateTouch();
+#endif
     }
 
     private void UpdateTouch()
@@ -85,12 +88,12 @@ public class TapSwipeDetector : MonoBehaviour
         {
             if (IsVerticalSwipe())
             {
-                var direction = fingerDownPosition.y - fingerUpPosition.y > 0 ? SwipeDirection.Up : SwipeDirection.Down;
+                var direction = fingerDownPosition.y - fingerUpPosition.y > 0 ? SwipeDirection.Down : SwipeDirection.Up;
                 SendSwipe(direction);
             }
             else
             {
-                var direction = fingerDownPosition.x - fingerUpPosition.x > 0 ? SwipeDirection.Right : SwipeDirection.Left;
+                var direction = fingerDownPosition.x - fingerUpPosition.x > 0 ? SwipeDirection.Left : SwipeDirection.Right;
                 SendSwipe(direction);
             }
             fingerUpPosition = fingerDownPosition;

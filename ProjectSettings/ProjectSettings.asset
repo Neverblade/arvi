@@ -152,7 +152,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    iOS: com.neverblade.uniquestuff123
+    iOS: com.neverblade.54923875723
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
@@ -280,7 +280,7 @@ PlayerSettings:
   enableCrashReportAPI: 0
   cameraUsageDescription: Blah blah
   locationUsageDescription: Blah blah
-  microphoneUsageDescription: 
+  microphoneUsageDescription: Blah
   switchNetLibKey: 
   switchSocketMemoryPoolSize: 6144
   switchSocketAllocatorPoolSize: 128
