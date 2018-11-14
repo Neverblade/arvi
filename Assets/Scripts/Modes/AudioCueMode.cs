@@ -84,7 +84,7 @@ public class AudioCueMode : Mode {
     private void SpecialOutputElement() {
         if (MM.instance.elements[MM.instance.index].name.Equals(AUDIO_CUE_LIST_NAME)) {
             Audio audio = AudioLibrary.instance.library[audioLibraryIndex];
-            MM.instance.OutputText(AUDIO_CUE_LIST_NAME + ", " + audio.id);
+            MM.OutputText(AUDIO_CUE_LIST_NAME + ", " + audio.id);
         } else {
             OutputCurrentElement();
         }
@@ -118,7 +118,7 @@ public class AudioCueMode : Mode {
         AM.instance.ChangeCandidateAudioCueClip(audio);
 
         // Output current audio cue name
-        MM.instance.OutputText(audio.id);
+        MM.OutputText(audio.id);
     }
 
     /**

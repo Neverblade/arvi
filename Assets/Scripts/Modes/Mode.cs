@@ -10,7 +10,7 @@ public abstract class Mode : MonoBehaviour {
     public abstract void CleanupMode();
 
     public void OutputCurrentElement() {
-        MM.instance.OutputText(MM.instance.elements[MM.instance.index].name);
+        MM.OutputText(MM.instance.elements[MM.instance.index].name);
     }
 
     public void OnDoubleTapDefault() {

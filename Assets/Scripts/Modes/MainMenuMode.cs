@@ -47,7 +47,7 @@ public class MainMenuMode : Mode {
             Debug.Log("Scanning. Moving to New Map Mode.");
             MM.instance.SwitchModes(scanningMode);
         } else {
-            MM.instance.OutputText("ARVI is still loading, please wait.");
+            MM.OutputText("ARVI is still loading, please wait.");
         }
     }
 

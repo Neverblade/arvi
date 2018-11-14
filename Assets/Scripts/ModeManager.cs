@@ -50,7 +50,8 @@ public class ModeManager : MonoBehaviour {
     }
 
     // TODO: Add text-to-speech support
-    public void OutputText(string text) {
+    public static void OutputText(string text) {
         Debug.Log("AUDIO: " + text);
+        TextToSpeechManager.instance.TextToSpeech(text);
     }
 }

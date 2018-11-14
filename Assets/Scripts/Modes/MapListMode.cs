@@ -43,7 +43,7 @@ public class MapListMode : Mode {
         if(PM.instance.LoadMapList(SeedFirstListElement)){
             Debug.Log("Loading. Moving to Map List Mode.");
         } else {
-            MM.instance.OutputText("ARVI is still loading, please wait.");
+            MM.OutputText("ARVI is still loading, please wait.");
         }
 
         // Set up elements
@@ -82,7 +82,7 @@ public class MapListMode : Mode {
     {
         if (MM.instance.elements[MM.instance.index].name.Equals(MAP_LIST_NAME))
         {
-            MM.instance.OutputText(MAP_LIST_NAME + ", " + PM.instance.selectedMapInfo.metadata.name);
+            MM.OutputText(MAP_LIST_NAME + ", " + PM.instance.selectedMapInfo.metadata.name);
         }
         else
         {
@@ -112,7 +112,7 @@ public class MapListMode : Mode {
         }
         PM.instance.mMapListIdx = PM.instance.mMapListIdx % PM.instance.mMapList.Count;
         AddMapToList(PM.instance.mMapList[PM.instance.mMapListIdx]);
-        MM.instance.OutputText(PM.instance.selectedMapInfo.metadata.name);
+        MM.OutputText(PM.instance.selectedMapInfo.metadata.name);
     }
 
 
@@ -124,7 +124,7 @@ public class MapListMode : Mode {
         }
         else
         {
-            MM.instance.OutputText(PM.instance.selectedMapInfo.metadata.name + ", " + mapInfoElement.mLocationText.text);
+            MM.OutputText(PM.instance.selectedMapInfo.metadata.name + ", " + mapInfoElement.mLocationText.text);
         }
     }
 
@@ -148,7 +148,7 @@ public class MapListMode : Mode {
 
     public void SeedFirstListElement() {
         if (PM.instance.mMapList.Count == 0) {
-            MM.instance.OutputText("There are no scans in your area.");
+            MM.OutputText("There are no scans in your area.");
         } else {
             AddMapToList(PM.instance.mMapList[PM.instance.mMapListIdx]);
         }

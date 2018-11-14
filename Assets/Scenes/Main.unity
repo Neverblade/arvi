@@ -4227,6 +4227,7 @@ GameObject:
   - component: {fileID: 2026431334}
   - component: {fileID: 2026431335}
   - component: {fileID: 2026431336}
+  - component: {fileID: 2026431337}
   m_Layer: 0
   m_Name: ScriptManager
   m_TagString: Untagged
@@ -4324,6 +4325,19 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 80b0a9a39b2896b459a465e4e98c74ee, type: 3}
   - id: Beam
     clip: {fileID: 8300000, guid: 1669bf5ebde159f408c70a822bcdd8a6, type: 3}
+--- !u!114 &2026431337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2026431330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51d8e07380e38a74480f603032d6b1a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pitch: 1
+  rate: 0.5
 --- !u!1 &2031121747
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: fdbb5d9af08e7f74a81854392a52c203
+  - enabled: 0
+    path: Assets/Plugins/GoodEnough/iOS TTS Example/ExampleScene.unity
+    guid: 5151d6fd614114869b0b76e9491cc83d
   m_configObjects: {}

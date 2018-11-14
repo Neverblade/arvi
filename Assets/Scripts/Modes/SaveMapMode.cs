@@ -90,7 +90,7 @@ public class SaveMapMode : Mode {
         Debug.Log("Submitting input field. Moving to Main Menu Mode.");
         string name = inputField.text;
         if (name.Equals("")) {
-            MM.instance.OutputText("Invalid scan name.");
+            MM.OutputText("Invalid scan name.");
         } else {
             PlacenoteManager.instance.SaveMap(name);
             MM.instance.SwitchModes(mainMenuMode);
