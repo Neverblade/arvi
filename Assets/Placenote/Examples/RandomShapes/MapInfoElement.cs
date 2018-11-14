@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 public class MapInfoElement : MonoBehaviour
 {
 	[SerializeField] Text mMapIdText;
-	[SerializeField] Text mLocationText;
+    [SerializeField] public Text mLocationText;
 	[SerializeField] Toggle mToggle;
 
 	public void Initialize (LibPlacenote.MapInfo mapInfo, ToggleGroup toggleGroup,
