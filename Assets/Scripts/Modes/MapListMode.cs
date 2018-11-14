@@ -135,6 +135,7 @@ public class MapListMode : Mode {
         });
         PM.instance.selectedMapInfo = mapInfo;
     }
+
     public void OnSelectMapList() {
         Debug.Log("Selecting map. Moving to Localize Mode.");
         MM.instance.SwitchModes(localizeMode);

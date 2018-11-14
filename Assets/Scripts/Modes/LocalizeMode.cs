@@ -45,6 +45,8 @@ public class LocalizeMode : Mode
     public void OnSelectCancel()
     {
         Debug.Log("Cancelling. Moving to MainList Mode.");
+        LibPlacenote.Instance.StopSession();
+        FeaturesVisualizer.clearPointcloud();
         AM.instance.ClearAudioCues();
         MM.instance.SwitchModes(mapListMode);
     }
