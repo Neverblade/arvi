@@ -112,7 +112,7 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
         );
     }
 
-    public bool LoadMapList(){
+    public bool LoadMapList(System.Action uiCallback){
         if (!LibPlacenote.Instance.Initialized())
         {
             Debug.Log("SDK not yet initialized");
@@ -129,6 +129,9 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
                 }
                 mMapList.Add(mapInfoItem); //changed
             }
+
+            // Seed the UI list
+            uiCallback();
         });
         return true;
     }

@@ -40,13 +40,11 @@ public class MapListMode : Mode {
         }
 
         //Load maps
-        if(PM.instance.LoadMapList()){
+        if(PM.instance.LoadMapList(SeedFirstListElement)){
             Debug.Log("Loading. Moving to Map List Mode.");
-        }else{
+        } else {
             MM.instance.OutputText("ARVI is still loading, please wait.");
         }
-        //Show first element
-        AddMapToList(PM.instance.mMapList[PM.instance.mMapListIdx]);
 
         // Set up elements
         List<MM.Element> elements = new List<MM.Element>();
@@ -147,4 +145,11 @@ public class MapListMode : Mode {
         MM.instance.SwitchModes(mainMenuMode);
     }
 
+    public void SeedFirstListElement() {
+        if (PM.instance.mMapList.Count == 0) {
+            MM.instance.OutputText("There are no scans in your area.");
+        } else {
+            AddMapToList(PM.instance.mMapList[PM.instance.mMapListIdx]);
+        }
+    }
 }
