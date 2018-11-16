@@ -15,6 +15,7 @@ public class LocalizeMode : Mode
 
         // Clean up elements
         MM.instance.elements.Clear();
+        UnhighlightElement(localizePanel);
 
         // Clean up event handlers
         TapSwipeDetector.OnTap -= OutputCurrentElement;
@@ -30,6 +31,8 @@ public class LocalizeMode : Mode
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
         MM.instance.elements = elements;
         MM.instance.index = 0;
+        MM.instance.currentPanel = localizePanel;
+        HighlightElement(localizePanel);
 
         // Set up event handlers
         TapSwipeDetector.OnTap += OutputCurrentElement;

@@ -15,6 +15,7 @@ public class MainMenuMode : Mode {
 
         // Clean up elements
         MM.instance.elements.Clear();
+        UnhighlightElement(mainMenuPanel);
 
         // Clean up event handlers
         TapSwipeDetector.OnSwipe -= OnSwipeDefault;
@@ -30,7 +31,9 @@ public class MainMenuMode : Mode {
         elements.Add(new MM.Element("Scanning", OnSelectScanning));
         elements.Add(new MM.Element("Localizing", OnSelectLocalizing));
         MM.instance.elements = elements;
+        MM.instance.currentPanel = mainMenuPanel;
         MM.instance.index = 0;
+        HighlightElement(mainMenuPanel);
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;

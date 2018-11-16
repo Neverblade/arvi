@@ -22,6 +22,8 @@ public class ModeManager : MonoBehaviour {
             this.function = function;
         }
     }
+    [HideInInspector] public GameObject currentPanel;
+    [HideInInspector] public RectTransform listTransform;
     [HideInInspector] public List<Element> elements;
     [HideInInspector] public int index;
 

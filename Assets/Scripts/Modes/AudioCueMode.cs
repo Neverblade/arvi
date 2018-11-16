@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using MM = ModeManager;
 using AM = AudioCueManagerV2;
 
@@ -25,6 +26,7 @@ public class AudioCueMode : Mode {
         foreach (Transform child in contentPanel.transform) {
             Destroy(child.gameObject);
         }
+        UnhighlightElement(audioCuePanel);
 
         // Clean up event handler
         TapSwipeDetector.OnSwipe -= OnHorizontalSwipe;
@@ -52,6 +54,9 @@ public class AudioCueMode : Mode {
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
         MM.instance.elements = elements;
         MM.instance.index = 0;
+        MM.instance.listTransform = contentPanel;
+        MM.instance.currentPanel = audioCuePanel;
+        HighlightElement(audioCuePanel, contentPanel);
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnHorizontalSwipe;
@@ -164,6 +169,14 @@ public class AudioCueMode : Mode {
      */
     private void AddAudioCueListElement(string id) {
         GameObject element = Instantiate(audioInfoElementPrefab);
+        Color highlightColor;
+        ColorUtility.TryParseHtmlString(HIGHLIGHT_COLOR_CODE, out highlightColor);
+        if (MM.instance.index == 0) {
+            element.GetComponent<Image>().color = highlightColor;
+        }
+        else {
+            element.GetComponent<Image>().color = Color.white;
+        }
         storedAudioInfoElement = element.GetComponent<AudioInfoElementV2>();
         storedAudioInfoElement.SetId(id);
         element.transform.SetParent(contentPanel);

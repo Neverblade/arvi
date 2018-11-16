@@ -23,6 +23,7 @@ public class SaveMapMode : Mode {
 
         // Clean up elements
         MM.instance.elements.Clear();
+        UnhighlightElement(saveMapPanel);
 
         // Clean up event handlers
         TapSwipeDetector.OnSwipe -= OnSwipeDefault;
@@ -40,6 +41,8 @@ public class SaveMapMode : Mode {
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
         MM.instance.elements = elements;
         MM.instance.index = 0;
+        MM.instance.currentPanel = saveMapPanel;
+        HighlightElement(saveMapPanel);
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;

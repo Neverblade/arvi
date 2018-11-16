@@ -23,6 +23,7 @@ public class MapListMode : Mode {
 
         // Clean up elements
         MM.instance.elements.Clear();
+        UnhighlightElement(mapListPanel);
 
         // Clean up event handler
         TapSwipeDetector.OnSwipe -= OnHorizontalSwipe;
@@ -51,7 +52,10 @@ public class MapListMode : Mode {
         elements.Add(new MM.Element("load map list", OnSelectMapList));
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
         MM.instance.elements = elements;
+        MM.instance.currentPanel = mapListPanel;
+        MM.instance.listTransform = listContentParent;
         MM.instance.index = 0;
+        HighlightElement(mapListPanel, listContentParent);
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnHorizontalSwipe;
@@ -68,9 +72,7 @@ public class MapListMode : Mode {
      */
     public void OnHorizontalSwipe(SwipeData swipeData){
         // Only trigger on left/right swipes
-        if (swipeData.Direction != SwipeDirection.Left
-            && swipeData.Direction != SwipeDirection.Right)
-        {
+        if (swipeData.Direction != SwipeDirection.Left && swipeData.Direction != SwipeDirection.Right) {
             return;
         }
 
@@ -78,14 +80,11 @@ public class MapListMode : Mode {
         SpecialOutputElement();
     }
 
-    private void SpecialOutputElement()
-    {
-        if (MM.instance.elements[MM.instance.index].name.Equals(MAP_LIST_NAME))
-        {
+    private void SpecialOutputElement() {
+        if (MM.instance.elements[MM.instance.index].name.Equals(MAP_LIST_NAME)) {
             MM.OutputText(MAP_LIST_NAME + ", " + PM.instance.selectedMapInfo.metadata.name);
         }
-        else
-        {
+        else {
             OutputCurrentElement();
         }
     }
@@ -94,11 +93,10 @@ public class MapListMode : Mode {
     * For iterating between map list elements
     */
     public void OnVerticalSwipe(SwipeData data) {
-        if (data.Direction != SwipeDirection.Down
-            && data.Direction != SwipeDirection.Up)
-        {
+        if (data.Direction != SwipeDirection.Down && data.Direction != SwipeDirection.Up) {
             return;
         }
+        
         foreach (Transform t in listContentParent.transform) {
             Destroy(t.gameObject);
         }
@@ -113,23 +111,29 @@ public class MapListMode : Mode {
         PM.instance.mMapListIdx = PM.instance.mMapListIdx % PM.instance.mMapList.Count;
         AddMapToList(PM.instance.mMapList[PM.instance.mMapListIdx]);
         MM.OutputText(PM.instance.selectedMapInfo.metadata.name);
+
     }
 
 
-    public void OnMapListTap()
-    {
-        if (!MM.instance.elements[MM.instance.index].name.Equals(MAP_LIST_NAME))
-        {
+    public void OnMapListTap() {
+        if (!MM.instance.elements[MM.instance.index].name.Equals(MAP_LIST_NAME)) {
             OutputCurrentElement();
         }
-        else
-        {
+        else {
             MM.OutputText(PM.instance.selectedMapInfo.metadata.name + ", " + mapInfoElement.mLocationText.text);
         }
     }
 
     public void AddMapToList(LibPlacenote.MapInfo mapInfo) {
         GameObject newElement = Instantiate(listElement) as GameObject;
+        Color highlightColor;
+        ColorUtility.TryParseHtmlString(HIGHLIGHT_COLOR_CODE, out highlightColor);
+        if (MM.instance.index == 0) {
+            newElement.GetComponent<Image>().color = highlightColor;
+        }
+        else {
+            newElement.GetComponent<Image>().color = Color.white;
+        }
         mapInfoElement = newElement.GetComponent<MapInfoElement>();
         mapInfoElement.Initialize(mapInfo, toggleGroup, listContentParent, (value) => {
         });

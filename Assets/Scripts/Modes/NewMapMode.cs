@@ -16,6 +16,7 @@ public class NewMapMode : Mode {
 
         // Clean up elements
         MM.instance.elements.Clear();
+        UnhighlightElement(newMapPanel);
 
         // Clean up event handlers
         TapSwipeDetector.OnSwipe -= OnSwipeDefault;
@@ -29,10 +30,12 @@ public class NewMapMode : Mode {
         // Set up elements
         List<MM.Element> elements = new List<MM.Element>();
         elements.Add(new MM.Element("Add audio cue", OnSelectAddAudioCue));
-        elements.Add(new MM.Element("Save", OnSelectSave));
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
+        elements.Add(new MM.Element("Save", OnSelectSave));
         MM.instance.elements = elements;
         MM.instance.index = 0;
+        MM.instance.currentPanel = newMapPanel;
+        HighlightElement(newMapPanel);
 
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnSwipeDefault;
