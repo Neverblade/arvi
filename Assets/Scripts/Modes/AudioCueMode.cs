@@ -171,12 +171,7 @@ public class AudioCueMode : Mode {
         GameObject element = Instantiate(audioInfoElementPrefab);
         Color highlightColor;
         ColorUtility.TryParseHtmlString(HIGHLIGHT_COLOR_CODE, out highlightColor);
-        if (MM.instance.index == 0) {
-            element.GetComponent<Image>().color = highlightColor;
-        }
-        else {
-            element.GetComponent<Image>().color = Color.white;
-        }
+        element.GetComponent<Image>().color = MM.instance.index == 0 ? highlightColor : Color.white;
         storedAudioInfoElement = element.GetComponent<AudioInfoElementV2>();
         storedAudioInfoElement.SetId(id);
         element.transform.SetParent(contentPanel);

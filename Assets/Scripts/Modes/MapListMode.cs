@@ -128,12 +128,7 @@ public class MapListMode : Mode {
         GameObject newElement = Instantiate(listElement) as GameObject;
         Color highlightColor;
         ColorUtility.TryParseHtmlString(HIGHLIGHT_COLOR_CODE, out highlightColor);
-        if (MM.instance.index == 0) {
-            newElement.GetComponent<Image>().color = highlightColor;
-        }
-        else {
-            newElement.GetComponent<Image>().color = Color.white;
-        }
+        newElement.GetComponent<Image>().color = MM.instance.index == 0 ? highlightColor : Color.white;
         mapInfoElement = newElement.GetComponent<MapInfoElement>();
         mapInfoElement.Initialize(mapInfo, toggleGroup, listContentParent, (value) => {
         });
