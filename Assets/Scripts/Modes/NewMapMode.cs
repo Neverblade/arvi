@@ -31,7 +31,7 @@ public class NewMapMode : Mode {
         List<MM.Element> elements = new List<MM.Element>();
         elements.Add(new MM.Element("Add audio cue", OnSelectAddAudioCue));
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
-        elements.Add(new MM.Element("Save", OnSelectSave));
+        elements.Add(new MM.Element("Save map", OnSelectSave));
         MM.instance.elements = elements;
         MM.instance.index = 0;
         MM.instance.currentPanel = newMapPanel;
@@ -43,24 +43,23 @@ public class NewMapMode : Mode {
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
 
         // Output current element name
-        OutputCurrentElement();
+        MM.OutputText("Creating a new map. Please scan the environment slowly to collect data.");
     }
 
     public void OnSelectAddAudioCue() {
-        Debug.Log("Adding audio cue. Moving to Audio Cue Menu.");
+        //Debug.Log("Adding audio cue. Moving to Audio Cue Menu.");
         AudioCueManagerV2.instance.PlaceCandidateAudioCue(Camera.main.transform.position);
         MM.instance.SwitchModes(audioCueMode);
     }
 
     public void OnSelectCancel() {
-        Debug.Log("Canceling. Moving to main menu.");
+        //Debug.Log("Canceling. Moving to main menu.");
         AM.instance.ClearAudioCues();
         MM.instance.SwitchModes(mainMenuMode);
     }
 
     public void OnSelectSave() {
-        Debug.Log("Saving. Moving to save map mode.");
-        //PlacenoteManager.instance.SaveMap();
+        //Debug.Log("Saving. Moving to save map mode.");
         MM.instance.SwitchModes(saveMapMode);
     }
 }

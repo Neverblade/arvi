@@ -40,22 +40,22 @@ public class MainMenuMode : Mode {
         TapSwipeDetector.OnTap += OutputCurrentElement;
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
 
-        // Output current element name
-        OutputCurrentElement();
+        // Output intro
+        MM.OutputText("Welcome to ARVI. Please select a mode.");
     }
 
     public void OnSelectScanning() {
         bool success = PM.instance.CreateNewSession();
         if (success) {
-            Debug.Log("Scanning. Moving to New Map Mode.");
+            //Debug.Log("Scanning. Moving to New Map Mode.");
             MM.instance.SwitchModes(scanningMode);
         } else {
-            MM.OutputText("ARVI is still loading, please wait.");
+            MM.OutputText("ARVI is still loading, please stand by.");
         }
     }
 
     public void OnSelectLocalizing() {
-        Debug.Log("Localizing. Moving to Load Map Menu.");
+        //Debug.Log("Localizing. Moving to Load Map Menu.");
         MM.instance.SwitchModes(localizingMode);
     }
 }

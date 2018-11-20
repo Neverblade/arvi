@@ -13,6 +13,7 @@ public class TextToSpeechManager : MonoBehaviour {
 
     public float pitch = 1;
     public float rate = 0.5f;
+    public float preUtteranceDelay = 0.1f;
 
 	void Awake () {
         if (instance == null) {
@@ -25,6 +26,7 @@ public class TextToSpeechManager : MonoBehaviour {
         TTS.DefaultParameters.Voice = null; // Default voice
         TTS.DefaultParameters.PitchMultiplier = pitch;
         TTS.DefaultParameters.SpeechRate = rate;
+        TTS.DefaultParameters.PreUtteranceDelay = preUtteranceDelay;
 	}
 
     public void TextToSpeech(string text) {

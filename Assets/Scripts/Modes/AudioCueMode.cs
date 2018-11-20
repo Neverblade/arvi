@@ -64,8 +64,8 @@ public class AudioCueMode : Mode {
         TapSwipeDetector.OnTap += OnAudioCueListTap;
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
 
-        // Output current element name
-        SpecialOutputElement();
+        // Output intro
+        MM.OutputText("Choose an audio cue from the list.");
     }
 
     /**
@@ -152,14 +152,14 @@ public class AudioCueMode : Mode {
     }
 
     public void OnSelectAudioCueList() {
-        Debug.Log("Selecting audio cue. Moving to New Map Mode.");
+        //Debug.Log("Selecting audio cue. Moving to New Map Mode.");
         AM.instance.PlayCandidateAudioCueSound();
         AM.instance.ConfirmCandidateAudioCue();
         MM.instance.SwitchModes(newMapMode);
     }
 
     public void OnSelectCancel() {
-        Debug.Log("Cancelling. Moving to New Map Mode.");
+        //Debug.Log("Cancelling. Moving to New Map Mode.");
         AM.instance.RemoveCandidateAudioCue();
         MM.instance.SwitchModes(newMapMode);
     }

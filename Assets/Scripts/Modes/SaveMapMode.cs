@@ -6,7 +6,7 @@ using MM = ModeManager;
 
 public class SaveMapMode : Mode {
 
-    public static string inputFieldElementName = "Map name input field";
+    public static string inputFieldElementName = "Map name text box";
 
     public GameObject saveMapPanel;
     public Mode newMapMode;
@@ -50,13 +50,13 @@ public class SaveMapMode : Mode {
         TapSwipeDetector.OnTap += OutputCurrentElement;
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
 
-        // Output current element name
-        OutputCurrentElement();
-
         // Activate input field
         inputField.interactable = true;
         inputField.Select();
         inputField.ActivateInputField();
+
+        // Output intro
+        MM.OutputText("Enter the name of your map.");
     }
 
     /**
@@ -90,7 +90,7 @@ public class SaveMapMode : Mode {
     }
 
     public void OnSelectInputField() {
-        Debug.Log("Submitting input field. Moving to Main Menu Mode.");
+        //Debug.Log("Submitting input field. Moving to Main Menu Mode.");
         string name = inputField.text;
         if (name.Equals("")) {
             MM.OutputText("Invalid scan name.");
@@ -101,7 +101,7 @@ public class SaveMapMode : Mode {
     }
 
     public void OnSelectCancel() {
-        Debug.Log("Canceling. Moving to New Map Mode");
+        //Debug.Log("Canceling. Moving to New Map Mode");
         MM.instance.SwitchModes(newMapMode);
     }
 }

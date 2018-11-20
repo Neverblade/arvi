@@ -7,7 +7,7 @@ using PM = PlacenoteManager;
 
 public class MapListMode : Mode {
 
-    public static string MAP_LIST_NAME = "load map list";
+    public static string MAP_LIST_NAME = "Map list";
 
     public GameObject mapListPanel;
     public RectTransform listContentParent;
@@ -42,14 +42,14 @@ public class MapListMode : Mode {
 
         //Load maps
         if(PM.instance.LoadMapList(SeedFirstListElement)){
-            Debug.Log("Loading. Moving to Map List Mode.");
+            //Debug.Log("Loading. Moving to Map List Mode.");
         } else {
-            MM.OutputText("ARVI is still loading, please wait.");
+            MM.OutputText("ARVI is still loading, please stand by.");
         }
 
         // Set up elements
         List<MM.Element> elements = new List<MM.Element>();
-        elements.Add(new MM.Element("load map list", OnSelectMapList));
+        elements.Add(new MM.Element(MAP_LIST_NAME, OnSelectMapList));
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
         MM.instance.elements = elements;
         MM.instance.currentPanel = mapListPanel;
@@ -63,8 +63,8 @@ public class MapListMode : Mode {
         TapSwipeDetector.OnTap += OnMapListTap;
         TapSwipeDetector.OnDoubleTap += OnDoubleTapDefault;
 
-        // Output current element name
-        SpecialOutputElement();
+        // Output intro
+        MM.OutputText("Choose a map from the list.");
     }
 
     /**
@@ -136,12 +136,12 @@ public class MapListMode : Mode {
     }
 
     public void OnSelectMapList() {
-        Debug.Log("Selecting map. Moving to Localize Mode.");
+        //Debug.Log("Selecting map. Moving to Localize Mode.");
         MM.instance.SwitchModes(localizeMode);
     }
 
     public void OnSelectCancel() {
-        Debug.Log("Cancelling. Moving to Main Menu Mode.");
+        //Debug.Log("Cancelling. Moving to Main Menu Mode.");
         MM.instance.SwitchModes(mainMenuMode);
     }
 

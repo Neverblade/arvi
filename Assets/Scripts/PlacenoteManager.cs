@@ -243,16 +243,16 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     public void OnPose(Matrix4x4 outputPose, Matrix4x4 arkitPose) { }
 
     public void OnStatusChange(LibPlacenote.MappingStatus prevStatus, LibPlacenote.MappingStatus currStatus) {
-        Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
+        //Debug.Log("prevStatus: " + prevStatus.ToString() + " currStatus: " + currStatus.ToString());
         if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.LOST) {
-            OutputPlacenoteText("Localized");
+            //ModeManager.OutputText("Localized.");
             AM.instance.LoadAudioCuesJSON(selectedMapInfo.metadata.userdata);
         }
         else if (currStatus == LibPlacenote.MappingStatus.RUNNING && prevStatus == LibPlacenote.MappingStatus.WAITING) {
-            OutputPlacenoteText("Mapping: Tap to add audio cues");
+            //OutputPlacenoteText("Mapping: Tap to add audio cues");
         }
         else if (currStatus == LibPlacenote.MappingStatus.LOST) {
-            OutputPlacenoteText("Searching for position lock");
+            //OutputPlacenoteText("Searching for position lock");
         }
         else if (currStatus == LibPlacenote.MappingStatus.WAITING) {
             if (AM.instance.audioCueObjList.Count != 0) {

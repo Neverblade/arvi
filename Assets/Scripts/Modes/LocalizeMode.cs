@@ -41,13 +41,13 @@ public class LocalizeMode : Mode
         //Calling Placenote to localize
         PM.instance.StartLocalize();
 
-        // Output current element name
-        OutputCurrentElement();
+        // Output intro
+        MM.OutputText("Scan the area around you to localize yourself.");
     }
 
     public void OnSelectCancel()
     {
-        Debug.Log("Cancelling. Moving to MainList Mode.");
+        //Debug.Log("Cancelling. Moving to MainList Mode.");
         LibPlacenote.Instance.StopSession();
         FeaturesVisualizer.clearPointcloud();
         AM.instance.ClearAudioCues();
