@@ -23,6 +23,10 @@ public class MapListMode : Mode {
 
         // Clean up elements
         MM.instance.elements.Clear();
+        foreach (Transform child in listContentParent.transform)
+        {
+            Destroy(child.gameObject);
+        }
         UnhighlightElement(mapListPanel);
 
         // Clean up event handler
