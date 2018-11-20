@@ -19,7 +19,7 @@ public class MapInfoElement : MonoBehaviour
 			mMapIdText.text = mapInfo.metadata.name;
 		}
 		mToggle.group = toggleGroup;
-		gameObject.transform.SetParent (listParent);
+		gameObject.transform.SetParent (listParent, false);
 		mToggle.onValueChanged.AddListener (onToggleChanged);
 
 		if (Input.location.status != LocationServiceStatus.Running) {

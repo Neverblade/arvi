@@ -174,6 +174,6 @@ public class AudioCueMode : Mode {
         element.GetComponent<Image>().color = MM.instance.index == 0 ? highlightColor : Color.white;
         storedAudioInfoElement = element.GetComponent<AudioInfoElementV2>();
         storedAudioInfoElement.SetId(id);
-        element.transform.SetParent(contentPanel);
+        element.transform.SetParent(contentPanel, false);
     }
 }
