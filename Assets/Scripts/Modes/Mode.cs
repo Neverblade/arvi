@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using MM = ModeManager;
+using PM = PlacenoteManager;
 
 public abstract class Mode : MonoBehaviour {
 
@@ -41,8 +42,14 @@ public abstract class Mode : MonoBehaviour {
         image.color = highlightColor;
 
         if(transform != null && transform.childCount!=0){
-            GameObject listItemGameObject =transform.GetChild(0).gameObject;
-            listItemGameObject.GetComponent<Image>().color = MM.instance.index == 0 ? highlightColor : Color.white;
+            for (int i = 0; i < transform.childCount;i++){
+                GameObject listItemGameObject = transform.GetChild(i).gameObject;
+                if (i!= PM.instance.mMapListIdx){
+                    listItemGameObject.GetComponent<Image>().color = MM.instance.index == 0 ? highlightColor : Color.white;
+                } else {
+                    listItemGameObject.GetComponent<Image>().color = Color.white;
+                }
+            }
         }
     } 
 

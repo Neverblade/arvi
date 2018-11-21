@@ -23,8 +23,8 @@ public class MapListMode : Mode {
 
         // Clean up elements
         MM.instance.elements.Clear();
-        foreach (Transform child in listContentParent.transform)
-        {
+        PM.instance.mMapList.Clear();
+        foreach (Transform child in listContentParent.transform){
             Destroy(child.gameObject);
         }
         UnhighlightElement(mapListPanel);
@@ -45,11 +45,12 @@ public class MapListMode : Mode {
         }
 
         //Load maps
-        if(PM.instance.LoadMapList(SeedFirstListElement)){
+        if (PM.instance.LoadMapList(SeedFirstListElement)){
             //Debug.Log("Loading. Moving to Map List Mode.");
         } else {
             MM.OutputText("ARVI is still loading, please stand by.");
         }
+        PM.instance.selectedMapInfo = PM.instance.mMapList[PM.instance.mMapListIdx];
 
         // Set up elements
         List<MM.Element> elements = new List<MM.Element>();
@@ -60,7 +61,7 @@ public class MapListMode : Mode {
         MM.instance.listTransform = listContentParent;
         MM.instance.index = 0;
         HighlightElement(mapListPanel, listContentParent);
-
+       
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnHorizontalSwipe;
         TapSwipeDetector.OnSwipe += OnVerticalSwipe;
@@ -69,6 +70,7 @@ public class MapListMode : Mode {
 
         // Output intro
         MM.OutputText("Choose a map from the list.");
+        MM.OutputText(PM.instance.selectedMapInfo.metadata.name);
     }
 
     /**
@@ -100,10 +102,8 @@ public class MapListMode : Mode {
         if (data.Direction != SwipeDirection.Down && data.Direction != SwipeDirection.Up) {
             return;
         }
-        
-        foreach (Transform t in listContentParent.transform) {
-            Destroy(t.gameObject);
-        }
+
+
 
         if (data.Direction == SwipeDirection.Up) {
             PM.instance.mMapListIdx -= 1;
@@ -113,7 +113,9 @@ public class MapListMode : Mode {
             PM.instance.mMapListIdx += 1;
         }
         PM.instance.mMapListIdx = PM.instance.mMapListIdx % PM.instance.mMapList.Count;
-        AddMapToList(PM.instance.mMapList[PM.instance.mMapListIdx]);
+
+        HighlightElement(mapListPanel, listContentParent);
+        PM.instance.selectedMapInfo = PM.instance.mMapList[PM.instance.mMapListIdx];
         MM.OutputText(PM.instance.selectedMapInfo.metadata.name);
 
     }
@@ -130,13 +132,9 @@ public class MapListMode : Mode {
 
     public void AddMapToList(LibPlacenote.MapInfo mapInfo) {
         GameObject newElement = Instantiate(listElement) as GameObject;
-        Color highlightColor;
-        ColorUtility.TryParseHtmlString(HIGHLIGHT_COLOR_CODE, out highlightColor);
-        newElement.GetComponent<Image>().color = MM.instance.index == 0 ? highlightColor : Color.white;
         mapInfoElement = newElement.GetComponent<MapInfoElement>();
         mapInfoElement.Initialize(mapInfo, toggleGroup, listContentParent, (value) => {
         });
-        PM.instance.selectedMapInfo = mapInfo;
     }
 
     public void OnSelectMapList() {
@@ -153,7 +151,9 @@ public class MapListMode : Mode {
         if (PM.instance.mMapList.Count == 0) {
             MM.OutputText("There are no scans in your area.");
         } else {
-            AddMapToList(PM.instance.mMapList[PM.instance.mMapListIdx]);
+            foreach(LibPlacenote.MapInfo map in PM.instance.mMapList){
+                AddMapToList(map);
+            }
         }
     }
 }
