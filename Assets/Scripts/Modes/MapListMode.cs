@@ -103,13 +103,29 @@ public class MapListMode : Mode {
             return;
         }
 
-
-
         if (data.Direction == SwipeDirection.Up) {
+            if (PM.instance.mMapListStart == PM.instance.mMapListIdx && PM.instance.mMapListStart==0) {
+                PM.instance.mMapListEnd = PM.instance.mMapList.Count - 1;
+                PM.instance.mMapListStart = PM.instance.mMapListEnd - 9;
+                UpdateList();
+            } else if(PM.instance.mMapListStart == PM.instance.mMapListIdx && PM.instance.mMapListStart!=0){
+                PM.instance.mMapListStart--;
+                PM.instance.mMapListEnd--;
+                UpdateList();
+            }
             PM.instance.mMapListIdx -= 1;
             PM.instance.mMapListIdx += PM.instance.mMapList.Count;
         }
         else if (data.Direction == SwipeDirection.Down) {
+            if (PM.instance.mMapListEnd == PM.instance.mMapListIdx && PM.instance.mMapListEnd<PM.instance.mMapList.Count-1) {
+                PM.instance.mMapListStart++;
+                PM.instance.mMapListEnd++;
+                UpdateList();
+            } else if(PM.instance.mMapListEnd == PM.instance.mMapListIdx && PM.instance.mMapListEnd>=PM.instance.mMapList.Count-1) {
+                PM.instance.mMapListStart = 0;
+                PM.instance.mMapListEnd = PM.instance.mMapListStart + 9;
+                UpdateList();
+            }
             PM.instance.mMapListIdx += 1;
         }
         PM.instance.mMapListIdx = PM.instance.mMapListIdx % PM.instance.mMapList.Count;
@@ -151,9 +167,23 @@ public class MapListMode : Mode {
         if (PM.instance.mMapList.Count == 0) {
             MM.OutputText("There are no scans in your area.");
         } else {
-            foreach(LibPlacenote.MapInfo map in PM.instance.mMapList){
-                AddMapToList(map);
+            if(PM.instance.mMapListEnd>9){
+                PM.instance.mMapListEnd = 9;
             }
+            for (int i = PM.instance.mMapListStart; i <= PM.instance.mMapListEnd;i++){
+                AddMapToList(PM.instance.mMapList[i]);
+            }
+        }
+    }
+
+    public void UpdateList(){
+        foreach (Transform t in listContentParent.transform){
+            Destroy(t.gameObject);
+        }
+        MM.instance.listTransform = listContentParent;
+        listContentParent.DetachChildren();
+        for (int i = PM.instance.mMapListStart; i <= PM.instance.mMapListEnd; i++){
+            AddMapToList(PM.instance.mMapList[i]);
         }
     }
 }

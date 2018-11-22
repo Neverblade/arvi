@@ -24,6 +24,8 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
     }
 
     [HideInInspector] public List<LibPlacenote.MapInfo> mMapList = new List<LibPlacenote.MapInfo>(); //changed
+    [HideInInspector] public int mMapListStart = 0; //changed
+    [HideInInspector] public int mMapListEnd; //changed
     [HideInInspector] public int mMapListIdx = 0; //changed
 
     #region Public Functions
@@ -129,6 +131,8 @@ public class PlacenoteManager : MonoBehaviour, PlacenoteListener {
                 }
                 mMapList.Add(mapInfoItem); //changed
             }
+
+            mMapListEnd = mMapList.Count-1;
 
             // Seed the UI list
             uiCallback();
