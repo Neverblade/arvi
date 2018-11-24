@@ -43,14 +43,14 @@ public class MapListMode : Mode {
         foreach (Transform t in listContentParent.transform) {
             Destroy(t.gameObject);
         }
-
+        listContentParent.DetachChildren();
         //Load maps
         if (PM.instance.LoadMapList(SeedFirstListElement)){
             //Debug.Log("Loading. Moving to Map List Mode.");
         } else {
             MM.OutputText("ARVI is still loading, please stand by.");
         }
-        PM.instance.selectedMapInfo = PM.instance.mMapList[PM.instance.mMapListIdx];
+        //PM.instance.selectedMapInfo = PM.instance.mMapList[PM.instance.mMapListIdx];
 
         // Set up elements
         List<MM.Element> elements = new List<MM.Element>();
@@ -167,7 +167,7 @@ public class MapListMode : Mode {
         if (PM.instance.mMapList.Count == 0) {
             MM.OutputText("There are no scans in your area.");
         } else {
-            if(PM.instance.mMapListEnd>9){
+            if(PM.instance.mMapListEnd==0){
                 PM.instance.mMapListEnd = 9;
             }
             for (int i = PM.instance.mMapListStart; i <= PM.instance.mMapListEnd;i++){
