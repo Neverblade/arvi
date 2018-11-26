@@ -44,13 +44,13 @@ public class MapListMode : Mode {
             Destroy(t.gameObject);
         }
         listContentParent.DetachChildren();
+
         //Load maps
         if (PM.instance.LoadMapList(SeedFirstListElement)){
             //Debug.Log("Loading. Moving to Map List Mode.");
         } else {
             MM.OutputText("ARVI is still loading, please stand by.");
         }
-        //PM.instance.selectedMapInfo = PM.instance.mMapList[PM.instance.mMapListIdx];
 
         // Set up elements
         List<MM.Element> elements = new List<MM.Element>();
@@ -182,6 +182,7 @@ public class MapListMode : Mode {
         }
         MM.instance.listTransform = listContentParent;
         listContentParent.DetachChildren();
+
         for (int i = PM.instance.mMapListStart; i <= PM.instance.mMapListEnd; i++){
             AddMapToList(PM.instance.mMapList[i]);
         }
