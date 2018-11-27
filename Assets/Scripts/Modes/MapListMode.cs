@@ -105,7 +105,7 @@ public class MapListMode : Mode {
         if (data.Direction == SwipeDirection.Up) {
             if (PM.instance.mMapListStart == PM.instance.mMapListIdx && PM.instance.mMapListStart==0) {
                 PM.instance.mMapListEnd = PM.instance.mMapList.Count - 1;
-                PM.instance.mMapListStart = PM.instance.mMapListEnd - 9;
+                PM.instance.mMapListStart = Mathf.Max(0,PM.instance.mMapListEnd - 9);
                 UpdateList();
             } else if(PM.instance.mMapListStart == PM.instance.mMapListIdx && PM.instance.mMapListStart!=0){
                 PM.instance.mMapListStart--;
