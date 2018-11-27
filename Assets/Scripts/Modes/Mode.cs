@@ -78,7 +78,6 @@ public abstract class Mode : MonoBehaviour {
     public void SwitchElements(SwipeDirection dir) {
         //unhighlight current object
         UnhighlightElement(MM.instance.currentPanel);
-        print("prev: " + MM.instance.index);
         if (dir == SwipeDirection.Right) {
             MM.instance.index -= 1;
             MM.instance.index += MM.instance.elements.Count;
@@ -86,7 +85,6 @@ public abstract class Mode : MonoBehaviour {
             MM.instance.index += 1;
         }
         MM.instance.index = MM.instance.index % MM.instance.elements.Count;
-        print("next: " + MM.instance.index);
         //switch highlight to next new focus
         HighlightElement(MM.instance.currentPanel, MM.instance.listTransform);
     }

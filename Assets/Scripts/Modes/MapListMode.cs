@@ -122,7 +122,7 @@ public class MapListMode : Mode {
                 UpdateList();
             } else if(PM.instance.mMapListEnd == PM.instance.mMapListIdx && PM.instance.mMapListEnd>=PM.instance.mMapList.Count-1) {
                 PM.instance.mMapListStart = 0;
-                PM.instance.mMapListEnd = PM.instance.mMapListStart + 9;
+                PM.instance.mMapListEnd = Mathf.Min(PM.instance.mMapListStart + 9, PM.instance.mMapList.Count - 1);
                 UpdateList();
             }
             PM.instance.mMapListIdx += 1;
@@ -167,7 +167,7 @@ public class MapListMode : Mode {
             MM.OutputText("There are no scans in your area.");
         } else {
             if(PM.instance.mMapListEnd==0){
-                PM.instance.mMapListEnd = 9;
+                PM.instance.mMapListEnd = Mathf.Min(9, PM.instance.mMapList.Count - 1);
             }
             for (int i = PM.instance.mMapListStart; i <= PM.instance.mMapListEnd;i++){
                 AddMapToList(PM.instance.mMapList[i]);
