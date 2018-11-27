@@ -125,7 +125,8 @@ public class AudioCueMode : Mode
 
 
         // Update index
-        audioLibraryIndex += swipeData.Direction == SwipeDirection.Up ? 1 : -1;
+        storedAudioInfoElement.Pause();
+        audioLibraryIndex += swipeData.Direction == SwipeDirection.Up ? -1 : 1;
         int librarySize = AudioLibrary.instance.library.Length;
         audioLibraryIndex = (audioLibraryIndex + librarySize) % librarySize;
 

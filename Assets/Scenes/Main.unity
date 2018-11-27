@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1488,7 +1488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Content: {fileID: 2006216007}
   m_Horizontal: 0
-  m_Vertical: 1
+  m_Vertical: 0
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
@@ -3050,7 +3050,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Content: {fileID: 734990732}
   m_Horizontal: 0
-  m_Vertical: 1
+  m_Vertical: 0
   m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
@@ -4505,10 +4505,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   library:
-  - id: Cube Sound
+  - id: Crackle
     clip: {fileID: 8300000, guid: 80b0a9a39b2896b459a465e4e98c74ee, type: 3}
   - id: Beam
     clip: {fileID: 8300000, guid: 1669bf5ebde159f408c70a822bcdd8a6, type: 3}
+  - id: Bell
+    clip: {fileID: 8300000, guid: b1bc33e6a0c2ce74d9c0006fbc675d0a, type: 3}
+  - id: Surge
+    clip: {fileID: 8300000, guid: 5ec1c7fdccce135468ad119f196b47a9, type: 3}
+  - id: Buzz
+    clip: {fileID: 8300000, guid: 9fba4a23862466e4db6674d869f45497, type: 3}
 --- !u!114 &2026431337
 MonoBehaviour:
   m_ObjectHideFlags: 0
