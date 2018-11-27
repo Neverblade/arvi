@@ -26,7 +26,7 @@ public class TextToSpeechManager : MonoBehaviour {
         TTS.DefaultParameters.Voice = null; // Default voice
         TTS.DefaultParameters.PitchMultiplier = pitch;
         TTS.DefaultParameters.SpeechRate = rate;
-        TTS.DefaultParameters.PreUtteranceDelay = preUtteranceDelay;
+        //TTS.DefaultParameters.PreUtteranceDelay = preUtteranceDelay;
 	}
 
     public void TextToSpeech(string text) {
