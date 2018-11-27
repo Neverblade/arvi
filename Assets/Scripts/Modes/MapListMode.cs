@@ -45,22 +45,14 @@ public class MapListMode : Mode {
         }
         listContentParent.DetachChildren();
 
-        //Load maps
-        if (PM.instance.LoadMapList(SeedFirstListElement)){
-            //Debug.Log("Loading. Moving to Map List Mode.");
-        } else {
-            MM.OutputText("ARVI is still loading, please stand by.");
-        }
-
         // Set up elements
         List<MM.Element> elements = new List<MM.Element>();
         elements.Add(new MM.Element(MAP_LIST_NAME, OnSelectMapList));
         elements.Add(new MM.Element("Cancel", OnSelectCancel));
+        MM.instance.index = 0;
         MM.instance.elements = elements;
         MM.instance.currentPanel = mapListPanel;
         MM.instance.listTransform = listContentParent;
-        MM.instance.index = 0;
-        HighlightElement(mapListPanel, listContentParent);
        
         // Set up event handlers
         TapSwipeDetector.OnSwipe += OnHorizontalSwipe;
@@ -70,7 +62,14 @@ public class MapListMode : Mode {
 
         // Output intro
         MM.OutputText("Choose a map from the list.");
-        MM.OutputText(PM.instance.selectedMapInfo.metadata.name);
+
+        //Load maps
+        if (PM.instance.LoadMapList(SeedFirstListElement)) {
+            //Debug.Log("Loading. Moving to Map List Mode.");
+        }
+        else {
+            MM.OutputText("ARVI is still loading, please stand by.");
+        }
     }
 
     /**
@@ -173,6 +172,7 @@ public class MapListMode : Mode {
             for (int i = PM.instance.mMapListStart; i <= PM.instance.mMapListEnd;i++){
                 AddMapToList(PM.instance.mMapList[i]);
             }
+            HighlightElement(mapListPanel, listContentParent);
         }
     }
 

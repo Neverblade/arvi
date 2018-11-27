@@ -39,11 +39,10 @@ public abstract class Mode : MonoBehaviour {
         Image image = ChildGameObject.GetComponent<Image>();
         Color highlightColor = new Color();
         ColorUtility.TryParseHtmlString(HIGHLIGHT_COLOR_CODE, out highlightColor);
-        image.color = highlightColor;
 
         //if we are at audio cue list or map list
 
-        if(transform != null && transform.childCount!=0){
+        if(transform != null && transform.childCount!=0){ // Item is list
             image.color = MM.instance.index == 0 ? Color.white : highlightColor; //don't have to highlight background of list
             for (int i = 0; i < transform.childCount;i++){
                 GameObject listItemGameObject = transform.GetChild(i).gameObject;
@@ -53,6 +52,8 @@ public abstract class Mode : MonoBehaviour {
                     listItemGameObject.GetComponent<Image>().color = Color.white;
                 }
             }
+        } else { // Item isn't list
+            image.color = highlightColor;
         }
     }
 
@@ -77,7 +78,7 @@ public abstract class Mode : MonoBehaviour {
     public void SwitchElements(SwipeDirection dir) {
         //unhighlight current object
         UnhighlightElement(MM.instance.currentPanel);
-
+        print("prev: " + MM.instance.index);
         if (dir == SwipeDirection.Right) {
             MM.instance.index -= 1;
             MM.instance.index += MM.instance.elements.Count;
@@ -85,7 +86,7 @@ public abstract class Mode : MonoBehaviour {
             MM.instance.index += 1;
         }
         MM.instance.index = MM.instance.index % MM.instance.elements.Count;
-
+        print("next: " + MM.instance.index);
         //switch highlight to next new focus
         HighlightElement(MM.instance.currentPanel, MM.instance.listTransform);
     }
